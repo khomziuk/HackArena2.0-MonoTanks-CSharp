@@ -1,0 +1,16 @@
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\bin\Debug\net8.0\Agent.deps.json
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\bin\Debug\net8.0\Agent.dll
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\bin\Debug\net8.0\Agent.pdb
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.csproj.AssemblyReference.cache
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.AssemblyInfoInputs.cache
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.AssemblyInfo.cs
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.csproj.CoreCompileInputs.cache
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.sourcelink.json
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.csproj.Up2Date
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.dll
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\refint\Agent.dll
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\Agent.pdb
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\obj\Debug\net8.0\ref\Agent.dll
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\bin\Debug\net8.0\MonoTanksClientLogic.dll
+C:\Users\hisbo\Documents\Repos\HackArena2024H2-CSharp\Agent\bin\Debug\net8.0\MonoTanksClientLogic.pdb

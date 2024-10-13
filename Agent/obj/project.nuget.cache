@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "U8uF772JB38=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\hisbo\\Documents\\Repos\\HackArena2024H2-CSharp\\Agent\\Agent.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\hisbo\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
