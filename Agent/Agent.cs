@@ -10,7 +10,7 @@ namespace Agent
             Console.WriteLine($"AGENT CREATED!!! {lobbyData.PlayerId}");
         }
 
-        public AgentResponse NextMove(GameStatePayload gameState)
+        public AgentResponse NextMove(GameStatePayload.ForPlayer gameState)
         {
             return AgentResponse.Pass();
         }
