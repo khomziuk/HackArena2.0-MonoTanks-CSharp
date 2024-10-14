@@ -1,9 +1,10 @@
-﻿using System.Collections.Concurrent;
-using System.Net.WebSockets;
+﻿using System.Net.WebSockets;
 using System.Text;
-using System.Threading;
+using GameLogic.Networking;
 using MonoTanksClientLogic;
 using MonoTanksClientLogic.Networking;
+using MonoTanksClientLogic.Networking.GameEnd;
+using MonoTanksClientLogic.Networking.LobbyData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -20,6 +21,8 @@ internal class AgentWebSocketClient : IDisposable
     private readonly ClientWebSocket clientWebSocket;
     private readonly Uri serverURI;
     private Task? currentProcess;
+
+    private Player? player;
 
     private IAgent? agent;
 
@@ -45,17 +48,30 @@ internal class AgentWebSocketClient : IDisposable
     }
 
     /// <summary>
+    ///  Gets state of connection.
+    /// </summary>
+    public bool IsConnected => this.clientWebSocket.State == WebSocketState.Open;
+
+    /// <summary>
     ///  Connects to a WebSocket server as an asynchronous operation.
     /// </summary>
     /// <param name="uri">Represents uri of a WebSocket server.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
     public async Task ConnectAsync()
     {
-        await this.clientWebSocket.ConnectAsync(this.serverURI, CancellationToken.None);
-        Console.WriteLine("[System] Successfully connected to the server");
+        try
+        {
+            await this.clientWebSocket.ConnectAsync(this.serverURI, CancellationToken.None);
+            Console.WriteLine("[System] Successfully connected to the server");
 
-        // TODO: Run this in a new thread.
-        await this.ListenForMessagesAsync();
+            // TODO: Run this in a new thread.
+            await this.ListenForMessagesAsync();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("[System] Connection Failed.");
+        }
+
     }
 
     /// <summary>
@@ -83,7 +99,6 @@ internal class AgentWebSocketClient : IDisposable
     {
         byte[] buffer = Encoding.UTF8.GetBytes(message);
         await this.clientWebSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-        Console.WriteLine($"Sent: {message}");
     }
 
     private async Task ListenForMessagesAsync()
@@ -145,19 +160,16 @@ internal class AgentWebSocketClient : IDisposable
 
         try
         {
-            var settings = new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            };
+            packet = PacketSerializer.Deserialize(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
 
-            packet = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRecieved), settings)!;
+
         }
         catch (Exception ex)
         {
             Console.WriteLine("[ERROR] Packet deserialization failed: ");
-
             Console.WriteLine("[^^^^^] Message: {0}", ex.Message);
-            return;
+
+            throw;
         }
 
         if (this.currentProcess == null || this.currentProcess.IsCompleted)
@@ -173,6 +185,8 @@ internal class AgentWebSocketClient : IDisposable
 
     private async Task ProcessPacket(Packet packet)
     {
+        SerializationContext serializationContext = new(EnumSerializationFormat.Int);
+
         string? response = null;
         switch (packet.Type)
         {
@@ -199,11 +213,13 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.LobbyData:
                 {
                     Console.WriteLine("[System] Lobby data received");
-                    var lobbyDataPayload = packet.GetPayload<LobbyDataPayload>();
+                    var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.LobbyData.PlayerJsonConverter()]);
+                    var lobbyDataPayload = packet.GetPayload<LobbyDataPayload>(serializer);
 
                     if (this.agent == null)
                     {
                         this.agent = new Agent.Agent(lobbyDataPayload);
+                        this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
                     }
                     else
                     {
@@ -229,8 +245,17 @@ internal class AgentWebSocketClient : IDisposable
                 {
                     try
                     {
-                        var gameStatePayload = packet.GetPayload<GameStatePayload>();
+                        GameSerializationContext.Player gameSerializationContext = new(this.player!, EnumSerializationFormat.Int);
+                        var serializer = PacketSerializer.GetSerializer(GameStatePayload.GetConverters(gameSerializationContext));
+                        var gameStatePayload = packet.GetPayload<GameStatePayload.ForPlayer>(serializer);
                         AgentResponse agentResponse = this.agent!.NextMove(gameStatePayload);
+
+                        // there is already field "GameStateId" in JObject but
+                        // when i do agentResponse.Payload["GameStateId"] it
+                        // trggers no game state id warnings.
+                        // Due to that there are two game state id fields
+                        // in the serialized responce.
+                        agentResponse.Payload["gameStateId"] = gameStatePayload.Id;
                         response = JsonConvert.SerializeObject(agentResponse);
                     }
                     catch (Exception e)
@@ -246,7 +271,8 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.GameEnd:
                 {
                     Console.WriteLine("[SYSTEM] Game ended!");
-                    GameEndPayload gameEndPayload = packet.GetPayload<GameEndPayload>();
+                    var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.GameEnd.PlayerJsonConverter()]);
+                    GameEndPayload gameEndPayload = packet.GetPayload<GameEndPayload>(serializer);
                     this.agent!.onGameEnd(gameEndPayload);
                     break;
                 }
