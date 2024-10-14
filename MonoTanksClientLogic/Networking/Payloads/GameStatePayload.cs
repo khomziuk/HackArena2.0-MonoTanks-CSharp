@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using MonoTanksClientLogic.Networking.GameState;
+using MonoTanksClientLogic.Networking;
+using MonoTanksClientLogic;
+using Newtonsoft.Json;
 
 namespace MonoTanksClientLogic.Networking;
 
@@ -37,10 +40,49 @@ public class GameStatePayload : IPacketPayload
     internal Grid.MapPayload Map { get; }
 
     /// <summary>
+    /// Gets the converters to use during
+    /// serialization and deserialization.
+    /// </summary>
+    /// <param name="context">The serialization context.</param>
+    /// <returns>
+    /// The list of converters to use during
+    /// serialization and deserialization.
+    /// </returns>
+    public static List<JsonConverter> GetConverters(GameSerializationContext context)
+    {
+        return [new TankJsonConverter(context),
+            new TurretJsonConverter(context),
+            new GridTilesJsonConverter(context),
+            new GridVisibilityJsonConverter(context),
+            new MapJsonConverter(context),
+            new BulletJsonConverter(context),
+            new LaserJsonConverter(context),
+            new MineJsonConverter(context),
+            new ItemJsonConverter(context),
+            new WallJsonConverter(context),
+            new ZoneJsonConverter(context),
+            new PlayerJsonConverter(context)];
+    }
+
+    /// <summary>
     /// Represents a grid state payload for a specific player.
     /// </summary>
     public class ForPlayer : GameStatePayload
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForPlayer"/> class.
+        /// </summary>
+        /// <param name="id">The packet id.</param>
+        /// <param name="tick">The current tick.</param>
+        /// <param name="player">The player the payload is for.</param>
+        /// <param name="players">The list of players.</param>
+        /// <param name="grid">The grid state.</param>
+        public ForPlayer(string id, int tick, Player player, List<Player> players, Grid grid)
+            : base(tick, players, grid.ToMapPayload(player))
+        {
+            this.Id = id;
+        }
+
         [JsonConstructor]
         [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Newtonsoft.Json.")]
         private ForPlayer(string id, int tick, List<Player> players, Grid.MapPayload map)

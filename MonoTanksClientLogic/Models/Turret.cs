@@ -1,5 +1,8 @@
 ﻿namespace MonoTanksClientLogic;
 
+/// <summary>
+/// Represents a tank turret.
+/// </summary>
 public class Turret
 {
     /// <summary>
@@ -8,6 +11,10 @@ public class Turret
     public const int MaxBulletCount = 3;
 
     private const int BulletRegenTicks = 10;
+    private const int BulletDamage = 20;
+    private const float BulletSpeed = 2f;
+
+    private const int LaserDamage = 80;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Turret"/> class.
@@ -71,9 +78,17 @@ public class Turret
     }
 
     /// <summary>
-    /// Occurs when the tank shoots a bullet.
+    /// Occurs when the tank shot a bullet.
     /// </summary>
-    public event Action<Bullet>? Shot;
+    public event Action<Bullet>? BulletShot;
+
+    /// <summary>
+    /// Occurs when the tank used a laser.
+    /// </summary>
+    /// <remarks>
+    /// The object is a list of lasers, one for each tile.
+    /// </remarks>
+    public event Action<List<Laser>>? LaserUsed;
 
     /// <summary>
     /// Gets the direction of the turret.

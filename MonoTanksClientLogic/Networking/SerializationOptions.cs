@@ -5,7 +5,7 @@ namespace MonoTanksClientLogic.Networking;
 /// <summary>
 /// Represents a serialization options.
 /// </summary>
-internal class SerializationOptions
+public class SerializationOptions
 {
     /// <summary>
     /// Gets the default serialization options.
@@ -28,5 +28,5 @@ internal class SerializationOptions
     /// If <see langword="true"/>, the packet type will be serialized as a string.
     /// Otherwise, it will be serialized as an integer.
     /// </remarks>
-    public TypeOfPacketType TypeOfPacketType { get; init; } = TypeOfPacketType.Int;
+    public EnumSerializationFormat EnumSerialization { get; init; } = EnumSerializationFormat.Int;
 }

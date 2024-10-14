@@ -1,10 +1,15 @@
-﻿namespace MonoTanksClientLogic;
+﻿using System.Diagnostics;
+
+namespace MonoTanksClientLogic;
 
 /// <summary>
 /// Represents a tank.
 /// </summary>
 public class Tank
 {
+    private const int MineDamage = 50;
+    private readonly Dictionary<IStunEffect, int> remainingStuns = [];
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Tank"/> class.
     /// </summary>
@@ -33,8 +38,8 @@ public class Tank
     /// <para>
     /// This constructor should be used when creating a tank
     /// from player perspective, because they shouldn't know
-    /// the <see cref="Health"/>
-    /// (it will be set to <see langword="null"/>).
+    /// the <see cref="Health"/> and <see cref="SecondaryItem"/>
+    /// (these will be set to <see langword="null"/>).
     /// </para>
     /// <para>
     /// The <see cref="Owner"/> property is set to <see langword="null"/>.
@@ -56,6 +61,7 @@ public class Tank
     /// <param name="health">The health of the tank.</param>
     /// <param name="direction">The direction of the tank.</param>
     /// <param name="turret">The turret of the tank.</param>
+    /// <param name="secondaryItemType">The secondary item type of the tank.</param>
     /// <remarks>
     /// <para>
     /// This constructor should be used when creating a tank
@@ -67,10 +73,18 @@ public class Tank
     /// See its documentation for more information.
     /// </para>
     /// </remarks>
-    internal Tank(int x, int y, string ownerId, int health, Direction direction, Turret turret)
+    internal Tank(
+        int x,
+        int y,
+        string ownerId,
+        int health,
+        Direction direction,
+        Turret turret,
+        SecondaryItemType? secondaryItemType)
         : this(x, y, ownerId, direction, turret)
     {
         this.Health = health;
+        this.SecondaryItemType = secondaryItemType;
     }
 
     private Tank(int x, int y, string ownerId, Direction direction)
@@ -87,6 +101,11 @@ public class Tank
     /// Occurs when the tank dies.
     /// </summary>
     internal event EventHandler? Died;
+
+    /// <summary>
+    /// Occurs when the mine has been dropped;
+    /// </summary>
+    internal event EventHandler<Mine>? MineDropped;
 
     /// <summary>
     /// Gets the x coordinate of the tank.
@@ -126,6 +145,18 @@ public class Tank
     /// Gets the turret of the tank.
     /// </summary>
     public Turret Turret { get; private set; }
+
+#if DEBUG
+    /// <summary>
+    /// Gets or sets the secondary item of the tank.
+    /// </summary>
+    public SecondaryItemType? SecondaryItemType { get; set; }
+#else
+    /// <summary>
+    /// Gets the secondary item of the tank.
+    /// </summary>
+    public SecondaryItemType? SecondaryItemType { get; internal set; }
+#endif
 
     /// <summary>
     /// Gets the owner ID of the tank.
