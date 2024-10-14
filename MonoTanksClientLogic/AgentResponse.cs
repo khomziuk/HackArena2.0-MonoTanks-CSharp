@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MonoTanksClientLogic;
 
-public class AgentResponse : Packet
+public class AgentResponse() : Packet
 {
     public static AgentResponse Pass()
     {

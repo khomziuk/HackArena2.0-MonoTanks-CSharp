@@ -9,7 +9,7 @@ public interface IAgent
 {
     public void OnSubsequentLobbyData(LobbyDataPayload lobbyData);
 
-    public AgentResponse NextMove(GameStatePayload gameState);
+    public AgentResponse NextMove(GameStatePayload.ForPlayer gameState);
 
     public void onGameEnd(GameEndPayload gameEnd);
 }
