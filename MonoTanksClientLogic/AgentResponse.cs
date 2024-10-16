@@ -7,7 +7,7 @@ public class AgentResponse() : Packet
 {
     public static AgentResponse Pass()
     {
-        ResponsePassPayload responsePassPayload = new();
+        PassPayload responsePassPayload = new();
         return new AgentResponse()
         {
             Type = responsePassPayload.Type,

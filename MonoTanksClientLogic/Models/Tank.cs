@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace MonoTanksClientLogic;
+﻿namespace MonoTanksClientLogic;
 
 /// <summary>
 /// Represents a tank.
@@ -96,16 +94,6 @@ public class Tank
         this.Direction = direction;
         this.Turret = null!;  // Set in the other constructors
     }
-
-    /// <summary>
-    /// Occurs when the tank dies.
-    /// </summary>
-    internal event EventHandler? Died;
-
-    /// <summary>
-    /// Occurs when the mine has been dropped;
-    /// </summary>
-    internal event EventHandler<Mine>? MineDropped;
 
     /// <summary>
     /// Gets the x coordinate of the tank.

@@ -19,7 +19,7 @@ internal class PlayerJsonConverter(GameSerializationContext context) : JsonConve
         var color = jObject["color"]!.Value<uint>()!;
         var ping = jObject["ping"]!.Value<int>()!;
 
-        Grid.VisibilityPayload? visibility = default;
+        Grid.Visibility? visibility = default;
 
         if (context is GameSerializationContext.Spectator || context.IsPlayerWithId(id))
         {
@@ -29,7 +29,7 @@ internal class PlayerJsonConverter(GameSerializationContext context) : JsonConve
 
             if (context is GameSerializationContext.Spectator)
             {
-                visibility = jObject["visibility"]!.ToObject<Grid.VisibilityPayload>(serializer)!;
+                visibility = jObject["visibility"]!.ToObject<Grid.Visibility>(serializer)!;
             }
 
             return new Player(id, nickname, color, remainingTicksToRegen, visibility?.VisibilityGrid)
@@ -66,8 +66,8 @@ internal class PlayerJsonConverter(GameSerializationContext context) : JsonConve
 
         if (context is GameSerializationContext.Spectator)
         {
-            var visibilityPayload = new Grid.VisibilityPayload(value.VisibilityGrid!);
-            jObject["visibility"] = JToken.FromObject(visibilityPayload, serializer);
+            var Visibility = new Grid.Visibility(value.VisibilityGrid!);
+            jObject["visibility"] = JToken.FromObject(Visibility, serializer);
         }
 
         jObject.WriteTo(writer);

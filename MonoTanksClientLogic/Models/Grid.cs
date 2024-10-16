@@ -23,26 +23,6 @@ public class Grid(int dimension, int seed)
     private List<SecondaryItem> items = [];
 
     /// <summary>
-    /// Occurs when the state is updating.
-    /// </summary>
-    public event EventHandler? StateUpdating;
-
-    /// <summary>
-    /// Occurs when the state has updated.
-    /// </summary>
-    public event EventHandler? StateUpdated;
-
-    /// <summary>
-    /// Occurs when the dimensions are changing.
-    /// </summary>
-    public event EventHandler? DimensionsChanging;
-
-    /// <summary>
-    /// Occurs when the dimensions have changed.
-    /// </summary>
-    public event EventHandler? DimensionsChanged;
-
-    /// <summary>
     /// Gets an empty grid.
     /// </summary>
     public static Grid Empty => new(0, 0);
@@ -93,17 +73,17 @@ public class Grid(int dimension, int seed)
     public IEnumerable<SecondaryItem> Items => this.items;
 
     /// <summary>
-    /// Converts the grid to a map payload.
+    /// Converts the grid to a map .
     /// </summary>
     /// <param name="player">The player to convert the grid for.</param>
-    /// <returns>The map payload for the grid.</returns>
-    internal MapPayload ToMapPayload(Player? player)
+    /// <returns>The map  for the grid.</returns>
+    internal Map ToMap(Player? player)
     {
         var visibility = player is not null
-            ? new VisibilityPayload(player!.VisibilityGrid!)
+            ? new Visibility(player!.VisibilityGrid!)
             : null;
 
-        var tiles = new TilesPayload(
+        var tiles = new Tiles(
             this.WallGrid,
             this.tanks,
             this.bullets,
@@ -111,19 +91,19 @@ public class Grid(int dimension, int seed)
             this.mines,
             this.items);
 
-        return new MapPayload(visibility, tiles, this.zones);
+        return new Map(visibility, tiles, this.zones);
     }
 
     /// <summary>
-    /// Represents a map payload for the grid.
+    /// Represents a map  for the grid.
     /// </summary>
-    /// <param name="Visibility">The visibility payload for the grid.</param>
-    /// <param name="Tiles">The tiles payload for the grid.</param>
+    /// <param name="Visibility">The visibility for the grid.</param>
+    /// <param name="Tiles">The tiles  for the grid.</param>
     /// <param name="Zones">The zones of the grid.</param>
-    internal record class MapPayload(VisibilityPayload? Visibility, TilesPayload Tiles, List<Zone> Zones);
+    public record class Map(Visibility? Visibility, Tiles Tiles, List<Zone> Zones);
 
     /// <summary>
-    /// Represents a tiles payload for the grid.
+    /// Represents a tiles  for the grid.
     /// </summary>
     /// <param name="WallGrid">The wall grid of the grid.</param>
     /// <param name="Tanks">The tanks of the grid.</param>
@@ -131,7 +111,7 @@ public class Grid(int dimension, int seed)
     /// <param name="Lasers">The lasers on the grid.</param>
     /// <param name="Mines">The mines on the grid.</param>
     /// <param name="Items">The items on the grid.</param>
-    internal record class TilesPayload(
+    public record class Tiles(
         Wall?[,] WallGrid,
         List<Tank> Tanks,
         List<Bullet> Bullets,
@@ -140,8 +120,8 @@ public class Grid(int dimension, int seed)
         List<SecondaryItem> Items);
 
     /// <summary>
-    /// Represents a visibility payload for the grid.
+    /// Represents a visibility for the grid.
     /// </summary>
     /// <param name="VisibilityGrid">The visibility grid of the grid.</param>
-    internal record class VisibilityPayload(bool[,] VisibilityGrid);
+    public record class Visibility(bool[,] VisibilityGrid);
 }

@@ -3,11 +3,8 @@ using System.Text;
 using GameLogic.Networking;
 using MonoTanksClientLogic;
 using MonoTanksClientLogic.Networking;
-using MonoTanksClientLogic.Networking.GameEnd;
-using MonoTanksClientLogic.Networking.LobbyData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 namespace MonoTanksClient.Networking;
 
@@ -33,7 +30,7 @@ internal class AgentWebSocketClient : IDisposable
     /// <param name="port">Represents port of a WebSocket server.</param>
     /// <param name="nickname">Represents nickname of agent.</param>
     /// <param name="code">Represents join code.</param>
-    public AgentWebSocketClient(string host = "localhost", string port = "5000", string nickname = "empty", string code = "")
+    public AgentWebSocketClient(string host = "localhost", string port = "5000", string nickname = "", string code = "")
     {
         this.clientWebSocket = new ClientWebSocket();
 
@@ -46,11 +43,6 @@ internal class AgentWebSocketClient : IDisposable
 
         this.serverURI = new(link.ToString());
     }
-
-    /// <summary>
-    ///  Gets state of connection.
-    /// </summary>
-    public bool IsConnected => this.clientWebSocket.State == WebSocketState.Open;
 
     /// <summary>
     ///  Connects to a WebSocket server as an asynchronous operation.
@@ -71,7 +63,6 @@ internal class AgentWebSocketClient : IDisposable
         {
             Console.WriteLine("[System] Connection Failed.");
         }
-
     }
 
     /// <summary>
@@ -160,9 +151,9 @@ internal class AgentWebSocketClient : IDisposable
 
         try
         {
+            Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
+
             packet = PacketSerializer.Deserialize(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
-
-
         }
         catch (Exception ex)
         {
@@ -218,12 +209,8 @@ internal class AgentWebSocketClient : IDisposable
 
                     if (this.agent == null)
                     {
-                        this.agent = new Agent.Agent(lobbyDataPayload);
+                        this.agent = new Agent.Agent(new LobbyData(lobbyDataPayload));
                         this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
-                    }
-                    else
-                    {
-                        this.agent.OnSubsequentLobbyData(lobbyDataPayload);
                     }
 
                     break;
@@ -248,7 +235,7 @@ internal class AgentWebSocketClient : IDisposable
                         GameSerializationContext.Player gameSerializationContext = new(this.player!, EnumSerializationFormat.Int);
                         var serializer = PacketSerializer.GetSerializer(GameStatePayload.GetConverters(gameSerializationContext));
                         var gameStatePayload = packet.GetPayload<GameStatePayload.ForPlayer>(serializer);
-                        AgentResponse agentResponse = this.agent!.NextMove(gameStatePayload);
+                        AgentResponse agentResponse = this.agent!.NextMove(new GameState(gameStatePayload));
 
                         // there is already field "GameStateId" in JObject but
                         // when i do agentResponse.Payload["GameStateId"] it
@@ -273,7 +260,7 @@ internal class AgentWebSocketClient : IDisposable
                     Console.WriteLine("[SYSTEM] Game ended!");
                     var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.GameEnd.PlayerJsonConverter()]);
                     GameEndPayload gameEndPayload = packet.GetPayload<GameEndPayload>(serializer);
-                    this.agent!.onGameEnd(gameEndPayload);
+                    this.agent!.onGameEnd(new GameEnd(gameEndPayload));
                     break;
                 }
 

@@ -10,10 +10,10 @@ namespace MonoTanksClientLogic.Networking.GameState;
 /// Represents a grid state json converter.
 /// </summary>
 /// <param name="context">The serialization context.</param>
-internal class GridTilesJsonConverter(GameSerializationContext context) : JsonConverter<Grid.TilesPayload>
+internal class GridTilesJsonConverter(GameSerializationContext context) : JsonConverter<Grid.Tiles>
 {
     /// <inheritdoc/>
-    public override Grid.TilesPayload? ReadJson(JsonReader reader, Type objectType, Grid.TilesPayload? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override Grid.Tiles? ReadJson(JsonReader reader, Type objectType, Grid.Tiles? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         switch (context)
         {
@@ -28,7 +28,7 @@ internal class GridTilesJsonConverter(GameSerializationContext context) : JsonCo
     }
 
     /// <inheritdoc/>
-    public override void WriteJson(JsonWriter writer, Grid.TilesPayload? value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, Grid.Tiles? value, JsonSerializer serializer)
     {
         switch (context)
         {
@@ -44,7 +44,7 @@ internal class GridTilesJsonConverter(GameSerializationContext context) : JsonCo
         }
     }
 
-    private Grid.TilesPayload ReadPlayerJson(JsonReader reader, JsonSerializer serializer)
+    private Grid.Tiles ReadPlayerJson(JsonReader reader, JsonSerializer serializer)
     {
         var jObject = JArray.Load(reader);
 
@@ -110,10 +110,10 @@ internal class GridTilesJsonConverter(GameSerializationContext context) : JsonCo
             }
         }
 
-        return new Grid.TilesPayload(wallGrid, tanks, bullets, lasers, mines, items);
+        return new Grid.Tiles(wallGrid, tanks, bullets, lasers, mines, items);
     }
 
-    private Grid.TilesPayload ReadSpectatorJson(JsonReader reader, JsonSerializer serializer)
+    private Grid.Tiles ReadSpectatorJson(JsonReader reader, JsonSerializer serializer)
     {
         var jObject = JObject.Load(reader);
 
@@ -130,15 +130,15 @@ internal class GridTilesJsonConverter(GameSerializationContext context) : JsonCo
         var mines = jObject["mines"]!.ToObject<List<Mine>>(serializer)!;
         var items = jObject["items"]!.ToObject<List<SecondaryItem>>(serializer)!;
 
-        return new Grid.TilesPayload(wallGrid, tanks, bullets, lasers, mines, items);
+        return new Grid.Tiles(wallGrid, tanks, bullets, lasers, mines, items);
     }
 
-    private void WritePlayerJson(JsonWriter writer, Grid.TilesPayload? value, JsonSerializer serializer)
+    private void WritePlayerJson(JsonWriter writer, Grid.Tiles? value, JsonSerializer serializer)
     {
         throw new NotSupportedException();
     }
 
-    private void WriteSpectatorJson(JsonWriter writer, Grid.TilesPayload? value, JsonSerializer serializer)
+    private void WriteSpectatorJson(JsonWriter writer, Grid.Tiles? value, JsonSerializer serializer)
     {
         var jObject = new JObject
         {

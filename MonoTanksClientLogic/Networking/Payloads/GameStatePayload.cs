@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using MonoTanksClientLogic.Networking.GameState;
-using MonoTanksClientLogic.Networking;
-using MonoTanksClientLogic;
 using Newtonsoft.Json;
 
 namespace MonoTanksClientLogic.Networking;
@@ -12,7 +10,7 @@ namespace MonoTanksClientLogic.Networking;
 public class GameStatePayload : IPacketPayload
 {
     [JsonConstructor]
-    private GameStatePayload(int tick, List<Player> players, Grid.MapPayload map)
+    private GameStatePayload(int tick, List<Player> players, Grid.Map map)
     {
         this.Tick = tick;
         this.Players = players;
@@ -37,7 +35,7 @@ public class GameStatePayload : IPacketPayload
     /// Gets the map state.
     /// </summary>
     [JsonProperty]
-    internal Grid.MapPayload Map { get; }
+    internal Grid.Map Map { get; }
 
     /// <summary>
     /// Gets the converters to use during
@@ -78,14 +76,14 @@ public class GameStatePayload : IPacketPayload
         /// <param name="players">The list of players.</param>
         /// <param name="grid">The grid state.</param>
         public ForPlayer(string id, int tick, Player player, List<Player> players, Grid grid)
-            : base(tick, players, grid.ToMapPayload(player))
+            : base(tick, players, grid.ToMap(player))
         {
             this.Id = id;
         }
 
         [JsonConstructor]
         [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Newtonsoft.Json.")]
-        private ForPlayer(string id, int tick, List<Player> players, Grid.MapPayload map)
+        private ForPlayer(string id, int tick, List<Player> players, Grid.Map map)
             : base(tick, players, map)
         {
             this.Id = id;

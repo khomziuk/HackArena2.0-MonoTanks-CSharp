@@ -78,19 +78,6 @@ public class Turret
     }
 
     /// <summary>
-    /// Occurs when the tank shot a bullet.
-    /// </summary>
-    public event Action<Bullet>? BulletShot;
-
-    /// <summary>
-    /// Occurs when the tank used a laser.
-    /// </summary>
-    /// <remarks>
-    /// The object is a list of lasers, one for each tile.
-    /// </remarks>
-    public event Action<List<Laser>>? LaserUsed;
-
-    /// <summary>
     /// Gets the direction of the turret.
     /// </summary>
     public Direction Direction { get; private set; }

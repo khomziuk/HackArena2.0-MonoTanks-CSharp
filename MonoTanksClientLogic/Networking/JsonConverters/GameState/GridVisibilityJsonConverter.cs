@@ -8,10 +8,10 @@ namespace MonoTanksClientLogic.Networking.GameState;
 /// Represents a grid state json converter.
 /// </summary>
 /// <param name="context">The serialization context.</param>
-internal class GridVisibilityJsonConverter(GameSerializationContext context) : JsonConverter<Grid.VisibilityPayload>
+internal class GridVisibilityJsonConverter(GameSerializationContext context) : JsonConverter<Grid.Visibility>
 {
     /// <inheritdoc/>
-    public override Grid.VisibilityPayload? ReadJson(JsonReader reader, Type objectType, Grid.VisibilityPayload? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override Grid.Visibility? ReadJson(JsonReader reader, Type objectType, Grid.Visibility? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jObject = JArray.Load(reader);
 
@@ -29,11 +29,11 @@ internal class GridVisibilityJsonConverter(GameSerializationContext context) : J
             }
         }
 
-        return new Grid.VisibilityPayload(visibilityGrid);
+        return new Grid.Visibility(visibilityGrid);
     }
 
     /// <inheritdoc/>
-    public override void WriteJson(JsonWriter writer, Grid.VisibilityPayload? value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, Grid.Visibility? value, JsonSerializer serializer)
     {
         var jObject = new JArray();
 

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace MonoTanksClientLogic;
+﻿namespace MonoTanksClientLogic;
 
 /// <summary>
 /// Represents a player.
@@ -50,11 +48,6 @@ public class Player
     }
 
     /// <summary>
-    /// Occurs when the tank regenerates.
-    /// </summary>
-    internal event EventHandler? TankRegenerated;
-
-    /// <summary>
     /// Gets the id of the player.
     /// </summary>
     public string Id { get; private set; }
@@ -90,19 +83,6 @@ public class Player
     public bool IsUsingRadar { get; internal set; }
 
     /// <summary>
-    /// Gets the regeneration progress of the tank.
-    /// </summary>
-    /// <value>
-    /// The regeneration progress of the tank as a value between 0 and 1.
-    /// </value>
-    /// <remarks>
-    /// The value is <see langword="null"/> if the tank is not dead.
-    /// </remarks>
-    public float? RegenProgress => this.RemainingTicksToRegen is not null
-        ? 1 - (this.RemainingTicksToRegen / (float)RegenTicks)
-        : null;
-
-    /// <summary>
     /// Gets the remaining ticks to regenerate the tank.
     /// </summary>
     /// <remarks>
@@ -128,7 +108,6 @@ public class Player
         internal set
         {
             this.tank = value;
-            this.Tank.Died += (s, e) => this.RemainingTicksToRegen = RegenTicks;
         }
     }
 
