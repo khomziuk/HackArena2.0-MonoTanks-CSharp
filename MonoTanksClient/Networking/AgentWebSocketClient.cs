@@ -212,6 +212,10 @@ internal class AgentWebSocketClient : IDisposable
                         this.agent = new Agent.Agent(new LobbyData(lobbyDataPayload));
                         this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
                     }
+                    else
+                    {
+                        this.agent.onSubsequentLobbyData(new LobbyData(lobbyDataPayload));
+                    }
 
                     break;
                 }
