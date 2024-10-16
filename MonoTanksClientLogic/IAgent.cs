@@ -7,9 +7,9 @@ namespace MonoTanksClientLogic;
 /// </summary>
 public interface IAgent
 {
-    public void OnSubsequentLobbyData(LobbyDataPayload lobbyData);
+    public AgentResponse NextMove(GameState gameState);
 
-    public AgentResponse NextMove(GameStatePayload.ForPlayer gameState);
+    public void onGameEnd(GameEnd gameEnd);
 
-    public void onGameEnd(GameEndPayload gameEnd);
+    public void onSubsequentLobbyData(LobbyData lobbyData);
 }
