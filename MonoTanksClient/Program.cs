@@ -2,7 +2,6 @@
 using CommandLine.Text;
 using MonoTanksClient.CommandLine;
 using MonoTanksClient.Networking;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 string host = "localhost";
 string port = "5000";
@@ -34,17 +33,17 @@ _ = parserResult.WithParsed((opts) =>
 
     if (!string.IsNullOrEmpty(opts.Port))
     {
-        host = opts.Port;
+        port = opts.Port;
     }
 
     if (!string.IsNullOrEmpty(opts.Nickname))
     {
-        host = opts.Nickname;
+        nickname = opts.Nickname;
     }
 
     if (!string.IsNullOrEmpty(opts.Code))
     {
-        host = opts.Code;
+        code = opts.Code;
     }
 });
 
