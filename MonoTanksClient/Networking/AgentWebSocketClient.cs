@@ -151,9 +151,12 @@ internal class AgentWebSocketClient : IDisposable
 
         try
         {
-            Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
-
             packet = PacketSerializer.Deserialize(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
+
+            if (packet.Type != PacketType.Ping)
+            {
+                Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
+            }
         }
         catch (Exception ex)
         {
@@ -163,14 +166,33 @@ internal class AgentWebSocketClient : IDisposable
             throw;
         }
 
-        if (this.currentProcess == null || this.currentProcess.IsCompleted)
+        switch (packet.Type)
         {
-            this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
-        }
-        else
-        {
-            Console.WriteLine("[System] Skipping packet due to previous packet not being processed yet");
-            return;
+            case PacketType.GameStarting:
+            case PacketType.GameState:
+            case PacketType.PlayerAlreadyMadeActionWarning:
+            case PacketType.SlowResponseWarning:
+            case PacketType.ActionIgnoredDueToDeadWarning:
+            case PacketType.CustomWarning:
+                {
+                    if (this.currentProcess == null || this.currentProcess.IsCompleted)
+                    {
+                        this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
+                    }
+                    else
+                    {
+                        Console.WriteLine("[System] Skipping packet due to previous packet not being processed yet");
+                        return;
+                    }
+
+                    break;
+                }
+
+            default:
+                {
+                    this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
+                    break;
+                }
         }
     }
 
@@ -214,21 +236,18 @@ internal class AgentWebSocketClient : IDisposable
                     }
                     else
                     {
-                        this.agent.onSubsequentLobbyData(new LobbyData(lobbyDataPayload));
+                        this.agent.OnSubsequentLobbyData(new LobbyData(lobbyDataPayload));
                     }
 
                     break;
                 }
 
-            case PacketType.LobbyDeleted:
+            case PacketType.GameStarting:
                 {
-                    Console.WriteLine("[System] Lobby deleted");
-                    break;
-                }
-
-            case PacketType.GameStart:
-                {
-                    Console.WriteLine("[System] Game started");
+                    Console.WriteLine("[System] Game starting");
+                    Packet readyToReceiveGameStatePayload = new() { Type = PacketType.ReadyToReceiveGameState, Payload = new JObject() };
+                    this.agent!.OnGameStarting();
+                    response = JsonConvert.SerializeObject(readyToReceiveGameStatePayload);
                     break;
                 }
 
@@ -264,25 +283,25 @@ internal class AgentWebSocketClient : IDisposable
                     Console.WriteLine("[SYSTEM] Game ended!");
                     var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.GameEnd.PlayerJsonConverter()]);
                     GameEndPayload gameEndPayload = packet.GetPayload<GameEndPayload>(serializer);
-                    this.agent!.onGameEnd(new GameEnd(gameEndPayload));
+                    this.agent!.OnGameEnd(new GameEnd(gameEndPayload));
                     break;
                 }
 
             case PacketType.PlayerAlreadyMadeActionWarning:
                 {
-                    Console.WriteLine("[System] Player already made action warning");
+                    this.agent!.OnWarningReceived(Warning.PlayerAlreadyMadeActionWarning, null);
                     break;
                 }
 
             case PacketType.SlowResponseWarning:
                 {
-                    Console.WriteLine("[System] Slow response warning");
+                    this.agent!.OnWarningReceived(Warning.SlowResponseWarning, null);
                     break;
                 }
 
             case PacketType.ActionIgnoredDueToDeadWarning:
                 {
-                    Console.WriteLine("[System] Action ignored due to dead warning");
+                    this.agent!.OnWarningReceived(Warning.ActionIgnoredDueToDeadWarning, null);
                     break;
                 }
 
@@ -301,8 +320,7 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.CustomWarning:
                 {
                     var customWarningPayload = packet.GetPayload<CustomWarningPayload>();
-                    Console.WriteLine("[WARN] Warning: ");
-                    Console.WriteLine($"[^^^^] {customWarningPayload.Message}");
+                    this.agent!.OnWarningReceived(Warning.CustomWarning, customWarningPayload.Message);
                     break;
                 }
 
@@ -312,6 +330,7 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.Rotation: break;
             case PacketType.AbilityUse: break;
             case PacketType.Pass: break;
+            case PacketType.ReadyToReceiveGameState: break;
             default: throw new NotSupportedException();
         }
 
