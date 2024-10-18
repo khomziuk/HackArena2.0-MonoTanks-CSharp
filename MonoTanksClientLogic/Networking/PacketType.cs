@@ -58,7 +58,7 @@ public enum PacketType
     /// <summary>
     /// The lobby deleted packet type.
     /// </summary>
-    LobbyDeleted = LobbyGroup | 0x2,
+    LobbyDataRequest = LobbyGroup | 0x2,
 
     // GameState group (range: 0x30 - 0x3F)
 
@@ -68,9 +68,9 @@ public enum PacketType
     GameStateGroup = 0x30,
 
     /// <summary>
-    /// The game start packet type.
+    /// The game started packet type.
     /// </summary>
-    GameStart = GameStateGroup | 0x1,
+    GameStarted = GameStateGroup | 0x1,
 
     /// <summary>
     /// The game state packet type.
@@ -81,6 +81,16 @@ public enum PacketType
     /// The game end packet type.
     /// </summary>
     GameEnd = GameStateGroup | HasPayload | 0x3,
+
+    /// <summary>
+    /// The game starting packet type.
+    /// </summary>
+    GameStarting = GameStateGroup | 0x4,
+
+    /// <summary>
+    /// The ready to receive game state packet type.
+    /// </summary>
+    ReadyToReceiveGameState = GameStateGroup | 0x5,
 
     // Player response group (range: 0x40 - 0x4F)
 
@@ -108,49 +118,6 @@ public enum PacketType
     /// The pass packet type.
     /// </summary>
     Pass = PlayerResponseActionGroup | HasPayload | 0x7,
-
-#if DEBUG
-
-    // GameState debug group (range: 0xC0 - 0xCF)
-
-    /// <summary>
-    /// The game state debug group packet type.
-    /// </summary>
-    GameStateDebugGroup = 0xC0,
-
-    /// <summary>
-    /// The set player score packet type.
-    /// </summary>
-    SetPlayerScore = GameStateDebugGroup | HasPayload | 0x1,
-
-    // Debug group (range: 0xD0 - 0xDF)
-
-    /// <summary>
-    /// The debug group packet type.
-    /// </summary>
-    DebugGroup = 0xD0,
-
-    /// <summary>
-    /// The global ability use packet type.
-    /// </summary>
-    GlobalAbilityUse = DebugGroup | HasPayload | 0x3,
-
-    /// <summary>
-    /// The force end game packet type (debug).
-    /// </summary>
-    ForceEndGame = DebugGroup | 0x4,
-
-    /// <summary>
-    /// The give ability packet type.
-    /// </summary>
-    GiveSecondaryItem = DebugGroup | HasPayload | 0x5,
-
-    /// <summary>
-    /// The global give ability packet type.
-    /// </summary>
-    GlobalGiveSecondaryItem = DebugGroup | HasPayload | 0x6,
-
-#endif
 
     // Warning group (range: 0xE0 - 0xEF)
 
@@ -201,4 +168,12 @@ public enum PacketType
     /// Can be merged with <see cref="HasPayload"/>.
     /// </remarks>
     InvalidPacketUsageError = ErrorGroup | 0x2,
+
+    /// <summary>
+    /// The invalid payload.
+    /// </summary>
+    /// <remarks>
+    /// Can be merged with <see cref="HasPayload"/>.
+    /// </remarks>
+    InvalidPayloadError = ErrorGroup | 0x3,
 }
