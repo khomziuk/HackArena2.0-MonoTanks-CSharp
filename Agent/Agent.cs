@@ -1,4 +1,5 @@
 ﻿using MonoTanksClientLogic;
+using MonoTanksClientLogic.Networking;
 
 namespace Agent
 {
@@ -41,16 +42,50 @@ namespace Agent
             };
         }
 
-        public void onGameEnd(GameEnd gameEnd)
+        public void OnGameEnd(GameEnd gameEnd)
         {
             // Define what your program should do when game is finished.
         }
 
-        public void onSubsequentLobbyData(LobbyData lobbyData)
+        public void OnGameStarting()
+        {
+            // Define what your program should do when game is starting.
+        }
+
+        public void OnSubsequentLobbyData(LobbyData lobbyData)
         {
             // Define what should happen when lobby is changed.
             // For example when somebody new joins or disconnects
             // new LobbyData is sent and this method is run.
+        }
+
+        public void OnWarningReceived(Warning warning, string? message)
+        {
+            // Define what your program should do when game is warning is recieved.
+
+            switch (warning)
+            {
+                case Warning.PlayerAlreadyMadeActionWarning:
+                    {
+                        Console.WriteLine("Player already made action warning");
+                        break;
+                    }
+                case Warning.SlowResponseWarning:
+                    {
+                        Console.WriteLine("Slow response warning");
+                        break;
+                    }
+                case Warning.ActionIgnoredDueToDeadWarning:
+                    {
+                        Console.WriteLine("Action ignored due to dead warning");
+                        break;
+                    }
+                case Warning.CustomWarning:
+                    {
+                        Console.WriteLine($"Custom warning: {message ?? "no message"}");
+                        break;
+                    }
+            }
         }
     }
 }
