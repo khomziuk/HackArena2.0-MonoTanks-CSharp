@@ -15,6 +15,8 @@ internal class AgentWebSocketClient : IDisposable
 {
     private readonly uint incomingMessageBufferSize = 32 * 1024;
 
+    private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1);
+
     private readonly ClientWebSocket clientWebSocket;
     private readonly Uri serverURI;
     private Task? currentProcess;
@@ -152,11 +154,6 @@ internal class AgentWebSocketClient : IDisposable
         try
         {
             packet = PacketSerializer.Deserialize(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
-
-            if (packet.Type != PacketType.Ping)
-            {
-                Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
-            }
         }
         catch (Exception ex)
         {
@@ -168,20 +165,29 @@ internal class AgentWebSocketClient : IDisposable
 
         switch (packet.Type)
         {
+            case PacketType.LobbyData:
             case PacketType.GameStarting:
             case PacketType.GameState:
+            case PacketType.GameEnded:
             case PacketType.PlayerAlreadyMadeActionWarning:
             case PacketType.SlowResponseWarning:
             case PacketType.ActionIgnoredDueToDeadWarning:
             case PacketType.CustomWarning:
                 {
-                    if (this.currentProcess == null || this.currentProcess.IsCompleted)
+                    if (this.semaphore.Wait(new TimeSpan(0, 0, 1)))
                     {
-                        this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
+                        try
+                        {
+                            this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
+                        }
+                        finally
+                        {
+                            _ = this.semaphore.Release();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("[System] Skipping packet due to previous packet not being processed yet");
+                        Console.WriteLine("[System] Skipping packet due to previous packet not being processed in time.");
                         return;
                     }
 
@@ -200,13 +206,12 @@ internal class AgentWebSocketClient : IDisposable
     {
         SerializationContext serializationContext = new(EnumSerializationFormat.Int);
 
-        string? response = null;
         switch (packet.Type)
         {
             case PacketType.Ping:
                 {
-                    Packet pongPacket = new Packet() { Type = PacketType.Pong, Payload = new JObject() };
-                    response = JsonConvert.SerializeObject(pongPacket);
+                    Packet pongPacket = new Packet() { Type = PacketType.Pong, Payload = [] };
+                    await this.SendMessageAsync(JsonConvert.SerializeObject(pongPacket));
                     break;
                 }
 
@@ -233,6 +238,16 @@ internal class AgentWebSocketClient : IDisposable
                     {
                         this.agent = new Agent.Agent(new LobbyData(lobbyDataPayload));
                         this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
+
+                        if (lobbyDataPayload.ServerSettings.SandboxMode)
+                        {
+                            Console.WriteLine("[SYSTEM] Sandbox mode enabled");
+
+                            Packet readyToReceivePacket = new Packet() { Type = PacketType.ReadyToReceiveGameState, Payload = [] };
+                            await this.SendMessageAsync(JsonConvert.SerializeObject(readyToReceivePacket));
+                            Packet gameStatusRequestPacket = new Packet() { Type = PacketType.GameStatusRequest, Payload = [] };
+                            await this.SendMessageAsync(JsonConvert.SerializeObject(gameStatusRequestPacket));
+                        }
                     }
                     else
                     {
@@ -245,9 +260,41 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.GameStarting:
                 {
                     Console.WriteLine("[System] Game starting");
-                    Packet readyToReceiveGameStatePayload = new() { Type = PacketType.ReadyToReceiveGameState, Payload = new JObject() };
-                    this.agent!.OnGameStarting();
-                    response = JsonConvert.SerializeObject(readyToReceiveGameStatePayload);
+
+                    if (this.agent == null)
+                    {
+                        while (this.agent == null)
+                        {
+                            try
+                            {
+                                Thread.Sleep(100);
+                            }
+                            catch (ThreadInterruptedException e)
+                            {
+                                Thread.CurrentThread.Interrupt();
+                                Console.WriteLine("[ERROR] Interrupted while waiting for agent initialization.");
+                                Console.WriteLine($"[^^^^^] {e.Message}");
+                            }
+                        }
+
+                        try
+                        {
+                            Packet readyToReceivePacket = new Packet() { Type = PacketType.ReadyToReceiveGameState, Payload = [] };
+                            await this.SendMessageAsync(JsonConvert.SerializeObject(readyToReceivePacket));
+                            Console.WriteLine("[SYSTEM] Sent ReadyToReceiveGameState after agent initialization.");
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("[ERROR] Error while sending ReadyToReceiveGameState");
+                            Console.WriteLine($"[^^^^^] {e.Message}");
+                        }
+                    }
+                    else
+                    {
+                        Packet readyToReceivePacket = new Packet() { Type = PacketType.ReadyToReceiveGameState, Payload = [] };
+                        await this.SendMessageAsync(JsonConvert.SerializeObject(readyToReceivePacket));
+                    }
+
                     break;
                 }
 
@@ -258,6 +305,7 @@ internal class AgentWebSocketClient : IDisposable
                         GameSerializationContext.Player gameSerializationContext = new(this.player!, EnumSerializationFormat.Int);
                         var serializer = PacketSerializer.GetSerializer(GameStatePayload.GetConverters(gameSerializationContext));
                         var gameStatePayload = packet.GetPayload<GameStatePayload.ForPlayer>(serializer);
+
                         AgentResponse agentResponse = this.agent!.NextMove(new GameState(gameStatePayload));
 
                         // there is already field "GameStateId" in JObject but
@@ -266,7 +314,7 @@ internal class AgentWebSocketClient : IDisposable
                         // Due to that there are two game state id fields
                         // in the serialized responce.
                         agentResponse.Payload["gameStateId"] = gameStatePayload.Id;
-                        response = JsonConvert.SerializeObject(agentResponse);
+                        await this.SendMessageAsync(JsonConvert.SerializeObject(agentResponse));
                     }
                     catch (Exception e)
                     {
@@ -278,7 +326,7 @@ internal class AgentWebSocketClient : IDisposable
                     break;
                 }
 
-            case PacketType.GameEnd:
+            case PacketType.GameEnded:
                 {
                     Console.WriteLine("[SYSTEM] Game ended!");
                     var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.GameEnd.PlayerJsonConverter()]);
@@ -332,11 +380,6 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.Pass: break;
             case PacketType.ReadyToReceiveGameState: break;
             default: throw new NotSupportedException();
-        }
-
-        if (response != null)
-        {
-            _ = this.SendMessageAsync(response);
         }
     }
 }
