@@ -34,12 +34,6 @@ internal class TurretJsonConverter(GameSerializationContext context) : JsonConve
             ["direction"] = JsonConverterUtils.WriteEnum(value!.Direction, context.EnumSerialization),
         };
 
-        if (context is GameSerializationContext.Spectator || context.IsPlayerWithId(value.Tank.Owner.Id))
-        {
-            jObject["bulletCount"] = value.BulletCount;
-            jObject["ticksToRegenBullet"] = value.RemainingTicksToRegenBullet;
-        }
-
         jObject.WriteTo(writer);
     }
 }

@@ -13,22 +13,6 @@ public class Tank
     /// </summary>
     /// <param name="x">The x coordinate of the tank.</param>
     /// <param name="y">The y coordinate of the tank.</param>
-    /// <param name="direction">The direction of the tank.</param>
-    /// <param name="turretDirection">The direction of the turret.</param>
-    /// <param name="owner">The owner of the tank.</param>
-    internal Tank(int x, int y, Direction direction, Direction turretDirection, Player owner)
-        : this(x, y, owner.Id, direction)
-    {
-        this.Owner = owner;
-        this.Health = 100;
-        this.Turret = new Turret(this, turretDirection);
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Tank"/> class.
-    /// </summary>
-    /// <param name="x">The x coordinate of the tank.</param>
-    /// <param name="y">The y coordinate of the tank.</param>
     /// <param name="ownerId">The owner ID of the tank.</param>
     /// <param name="direction">The direction of the tank.</param>
     /// <param name="turret">The turret of the tank.</param>
@@ -89,7 +73,6 @@ public class Tank
     {
         this.X = x;
         this.Y = y;
-        this.Owner = null!;
         this.OwnerId = ownerId;
         this.Direction = direction;
         this.Turret = null!;  // Set in the other constructors
@@ -116,15 +99,6 @@ public class Tank
     public bool IsDead => this.Health <= 0;
 
     /// <summary>
-    /// Gets the owner of the tank.
-    /// </summary>
-    /// <remarks>
-    /// The setter is internal because the owner is set
-    /// in the <see cref="Grid.UpdateFromGameStatePayload"/> method.
-    /// </remarks>
-    public Player Owner { get; internal set; }
-
-    /// <summary>
     /// Gets the direction of the tank.
     /// </summary>
     public Direction Direction { get; private set; }
@@ -134,22 +108,15 @@ public class Tank
     /// </summary>
     public Turret Turret { get; private set; }
 
-#if DEBUG
     /// <summary>
-    /// Gets or sets the secondary item of the tank.
+    /// Gets the owner ID of the tank.
     /// </summary>
-    public SecondaryItemType? SecondaryItemType { get; set; }
-#else
+    public string OwnerId { get; private set; }
+
     /// <summary>
     /// Gets the secondary item of the tank.
     /// </summary>
     public SecondaryItemType? SecondaryItemType { get; internal set; }
-#endif
-
-    /// <summary>
-    /// Gets the owner ID of the tank.
-    /// </summary>
-    internal string OwnerId { get; private set; }
 
     /// <summary>
     /// Sets the position of the tank.

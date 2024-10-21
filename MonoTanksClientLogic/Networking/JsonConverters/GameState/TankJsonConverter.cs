@@ -41,25 +41,6 @@ internal class TankJsonConverter(GameSerializationContext context) : JsonConvert
     /// <inheritdoc/>
     public override void WriteJson(JsonWriter writer, Tank? value, JsonSerializer serializer)
     {
-        var jObject = new JObject
-        {
-            ["ownerId"] = value!.OwnerId,
-            ["direction"] = JsonConverterUtils.WriteEnum(value.Direction, context.EnumSerialization),
-            ["turret"] = JObject.FromObject(value.Turret, serializer),
-        };
-
-        if (context is GameSerializationContext.Spectator)
-        {
-            jObject["x"] = value.X;
-            jObject["y"] = value.Y;
-        }
-
-        if (context is GameSerializationContext.Spectator || context.IsPlayerWithId(value.Owner.Id))
-        {
-            jObject["health"] = value.Health;
-            jObject["secondaryItem"] = (int?)value.SecondaryItemType;
-        }
-
-        jObject.WriteTo(writer);
+        throw new NotSupportedException();
     }
 }
