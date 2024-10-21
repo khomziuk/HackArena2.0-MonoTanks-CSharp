@@ -133,7 +133,7 @@ internal class AgentWebSocketClient : IDisposable
 
             if (result.MessageType == WebSocketMessageType.Text)
             {
-                this.HandleBuffer(buffer, result.Count);
+                _ = this.HandleBuffer(buffer, result.Count);
             }
             else if (result.MessageType == WebSocketMessageType.Close)
             {
@@ -147,7 +147,7 @@ internal class AgentWebSocketClient : IDisposable
         }
     }
 
-    private void HandleBuffer(byte[] buffer, int bytesRecieved)
+    private async Task HandleBuffer(byte[] buffer, int bytesRecieved)
     {
         Packet packet;
 
@@ -178,7 +178,7 @@ internal class AgentWebSocketClient : IDisposable
                     {
                         try
                         {
-                            this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
+                            await this.ProcessPacket(packet);
                         }
                         finally
                         {
@@ -196,7 +196,7 @@ internal class AgentWebSocketClient : IDisposable
 
             default:
                 {
-                    this.currentProcess = Task.Run(() => this.ProcessPacket(packet));
+                    _ = this.ProcessPacket(packet);
                     break;
                 }
         }
@@ -218,6 +218,8 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.ConnectionAccepted:
                 {
                     Console.WriteLine("[System] Connection accepted");
+                    Packet lobbyDataRequest = new Packet() { Type = PacketType.LobbyDataRequest, Payload = [] };
+                    await this.SendMessageAsync(JsonConvert.SerializeObject(lobbyDataRequest));
                     break;
                 }
 
