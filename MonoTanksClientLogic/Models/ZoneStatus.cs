@@ -19,14 +19,8 @@ public class ZoneStatus
     /// </summary>
     /// <param name="player">The player that is capturing the zone.</param>
     /// <param name="remainingTicks">The number of ticks remaining until the zone is captured.</param>
-    public class BeingCaptured(Player player, int remainingTicks) : ZoneStatus
+    public class BeingCaptured(string playerId, int remainingTicks) : ZoneStatus
     {
-        /// <summary>
-        /// Gets the player that is being capturing the zone.
-        /// </summary>
-        [JsonIgnore]
-        public Player Player { get; internal set; } = player;
-
         /// <summary>
         /// Gets the number of ticks remaining until the zone is captured.
         /// </summary>
@@ -35,46 +29,31 @@ public class ZoneStatus
         /// <summary>
         /// Gets the ID of the player that is being capturing the zone.
         /// </summary>
-        [JsonProperty]
-        internal string PlayerId { get; private set; } = player?.Id!;
+        public string PlayerId { get; internal set; } = playerId;
     }
 
     /// <summary>
     /// Represents a zone that is captured.
     /// </summary>
     /// <param name="player">The player that captured the zone.</param>
-    public class Captured(Player player) : ZoneStatus
+    public class Captured(string playerId) : ZoneStatus
     {
-        /// <summary>
-        /// Gets the player that is capturing the zone.
-        /// </summary>
-        [JsonIgnore]
-        public Player Player { get; internal set; } = player;
-
         /// <summary>
         /// Gets the ID of the player that is capturing the zone.
         /// </summary>
-        [JsonProperty]
-        internal string PlayerId { get; private set; } = player?.Id!;
+        public string PlayerId { get; internal set; } = playerId;
     }
 
     /// <summary>
     /// Represents a zone that is being contested.
     /// </summary>
     /// <param name="capturedBy">The player that captured the zone, if the zone was captured.</param>
-    public class BeingContested(Player? capturedBy) : ZoneStatus
+    public class BeingContested(string? capturedById) : ZoneStatus
     {
-        /// <summary>
-        /// Gets the player that is capturing the zone.
-        /// </summary>
-        [JsonIgnore]
-        public Player? CapturedBy { get; internal set; } = capturedBy;
-
         /// <summary>
         /// Gets the ID of the player that is capturing the zone.
         /// </summary>
-        [JsonProperty]
-        internal string? CapturedById { get; private set; } = capturedBy?.Id;
+        public string? CapturedById { get; private set; } = capturedById;
     }
 
     /// <summary>
@@ -83,20 +62,8 @@ public class ZoneStatus
     /// <param name="capturedBy">The player that captured the zone.</param>
     /// <param name="retakenBy">The player that is retaking the zone.</param>
     /// <param name="remainingTicks">The number of ticks remaining until the zone is retaken.</param>
-    public class BeingRetaken(Player capturedBy, Player retakenBy, int remainingTicks) : ZoneStatus
+    public class BeingRetaken(string capturedById, string retakenById, int remainingTicks) : ZoneStatus
     {
-        /// <summary>
-        /// Gets the player that is capturing the zone.
-        /// </summary>
-        [JsonIgnore]
-        public Player CapturedBy { get; internal set; } = capturedBy;
-
-        /// <summary>
-        /// Gets the player that is being retaking the zone.
-        /// </summary>
-        [JsonIgnore]
-        public Player RetakenBy { get; internal set; } = retakenBy;
-
         /// <summary>
         /// Gets the number of ticks remaining until the zone is retaken.
         /// </summary>
@@ -105,13 +72,11 @@ public class ZoneStatus
         /// <summary>
         /// Gets the ID of the player that is capturing the zone.
         /// </summary>
-        [JsonProperty]
-        internal string CapturedById { get; private set; } = capturedBy?.Id!;
+        public string CapturedById { get; private set; } = capturedById;
 
         /// <summary>
         /// Gets the ID of the player that is being retaking the zone.
         /// </summary>
-        [JsonProperty]
-        internal string RetakenById { get; private set; } = retakenBy?.Id!;
+        public string RetakenById { get; private set; } = retakenById;
     }
 }

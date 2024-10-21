@@ -53,7 +53,7 @@ internal class ZoneJsonConverter(GameSerializationContext context) : JsonConvert
             "beingCaptured" => token.ToObject<ZoneStatus.BeingCaptured>(serializer)!,
             "captured" => token.ToObject<ZoneStatus.Captured>(serializer)!,
             "beingContested" => new ZoneStatus.BeingContested(
-                token["capturedBy"]?.Type == JTokenType.Null ? null : token["capturedBy"]?.ToObject<Player>(serializer)),
+                token["capturedBy"]?.Type == JTokenType.Null ? null : token["capturedById"]!.Value<string>()),
             "beingRetaken" => token.ToObject<ZoneStatus.BeingRetaken>(serializer)!,
             "neutral" => token.ToObject<ZoneStatus.Neutral>(serializer)!,
             _ => throw new JsonSerializationException($"Unknown ZoneStatus type: {type}"),
