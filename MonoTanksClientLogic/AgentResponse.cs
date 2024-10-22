@@ -1,4 +1,5 @@
 ﻿using MonoTanksClientLogic.Networking;
+using MonoTanksClientLogic.Networking.Payloads;
 using Newtonsoft.Json.Linq;
 
 namespace MonoTanksClientLogic;
@@ -7,11 +8,11 @@ public class AgentResponse() : Packet
 {
     public static AgentResponse Pass()
     {
-        PassPayload responsePassPayload = new();
+        PassPayload passPayload = new();
         return new AgentResponse()
         {
-            Type = responsePassPayload.Type,
-            Payload = JObject.FromObject(responsePassPayload),
+            Type = passPayload.Type,
+            Payload = JObject.FromObject(passPayload),
         };
     }
 
@@ -41,7 +42,7 @@ public class AgentResponse() : Packet
 
     public static AgentResponse UseAbility(AbilityType abilityType)
     {
-        AbilityUsePayload abilityUsePayload = new(abilityType);
+        UseAbilityPayload abilityUsePayload = new(abilityType);
         return new AgentResponse()
         {
             Type = abilityUsePayload.Type,

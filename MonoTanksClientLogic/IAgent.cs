@@ -1,4 +1,6 @@
-﻿namespace MonoTanksClientLogic;
+﻿using MonoTanksClientLogic.Networking;
+
+namespace MonoTanksClientLogic;
 
 /// <summary>
 /// Represents required methods for agent.
