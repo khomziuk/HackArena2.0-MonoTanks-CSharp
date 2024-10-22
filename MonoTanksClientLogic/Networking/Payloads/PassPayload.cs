@@ -1,13 +1,8 @@
-﻿namespace MonoTanksClientLogic.Networking;
+﻿namespace MonoTanksClientLogic.Networking.Payloads;
 
-/// <summary>
-/// Represents a pass payload.
-/// </summary>
-public class PassPayload : IPacketPayload, IActionPayload
+public class PassPayload
 {
-    /// <inheritdoc/>
     public PacketType Type => PacketType.Pass;
 
-    /// <inheritdoc/>
     public string? GameStateId { get; init; }
 }

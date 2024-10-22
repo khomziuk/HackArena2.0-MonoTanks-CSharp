@@ -1,14 +1,9 @@
-﻿namespace MonoTanksClientLogic.Networking;
+﻿namespace MonoTanksClientLogic.Networking.Payloads;
 
-/// <summary>
-/// Represents a rotation payload.
-/// </summary>
-public class RotationPayload : IPacketPayload, IActionPayload
+public class RotationPayload
 {
-    /// <inheritdoc/>
     public PacketType Type => PacketType.Rotation;
 
-    /// <inheritdoc/>
     public string? GameStateId { get; init; }
 
     /// <summary>

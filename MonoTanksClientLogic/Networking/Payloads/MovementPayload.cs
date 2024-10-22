@@ -1,19 +1,11 @@
-﻿namespace MonoTanksClientLogic.Networking;
-
-/// <summary>
-/// Represents a movement payload.
-/// </summary>
-/// <param name="direction">The tank movement direction.</param>
-public class MovementPayload(MovementDirection direction) : IPacketPayload, IActionPayload
+﻿namespace MonoTanksClientLogic.Networking.Payloads
 {
-    /// <inheritdoc/>
-    public PacketType Type => PacketType.Movement;
+    public class MovementPayload(MovementDirection direction)
+    {
+        public PacketType Type => PacketType.Movement;
 
-    /// <inheritdoc/>
-    public string? GameStateId { get; init; }
+        public string? GameStateId { get; init; }
 
-    /// <summary>
-    /// Gets the tank movement direction.
-    /// </summary>
-    public MovementDirection Direction { get; } = direction;
+        public MovementDirection Direction { get; } = direction;
+    }
 }
