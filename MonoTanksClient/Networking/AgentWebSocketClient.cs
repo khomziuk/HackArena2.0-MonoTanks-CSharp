@@ -1,10 +1,9 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
-using GameLogic.Networking;
 using MonoTanksClientLogic;
 using MonoTanksClientLogic.Networking;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace MonoTanksClient.Networking;
 
@@ -13,15 +12,19 @@ namespace MonoTanksClient.Networking;
 /// </summary>
 internal class AgentWebSocketClient : IDisposable
 {
+    private readonly IContractResolver ContractResolver = new CamelCasePropertyNamesContractResolver();
     private readonly uint incomingMessageBufferSize = 32 * 1024;
-
     private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1);
 
     private readonly ClientWebSocket clientWebSocket;
     private readonly Uri serverURI;
     private Task? currentProcess;
 
-    private Player? player;
+#if DEBUG
+    private bool isFirstRecieved = false;
+#endif
+
+    //private Player? player;
 
     private IAgent? agent;
 
@@ -153,7 +156,23 @@ internal class AgentWebSocketClient : IDisposable
 
         try
         {
-            packet = PacketSerializer.Deserialize(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
+            var settings = new JsonSerializerSettings()
+            {
+                ContractResolver = ContractResolver,
+            };
+
+            packet = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRecieved), settings)!;
+
+            if (packet.Type == PacketType.GameState)
+            {
+                if (this.isFirstRecieved == false)
+                {
+                    Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
+                    this.isFirstRecieved = true;
+                }
+
+            }
+
         }
         catch (Exception ex)
         {
@@ -204,8 +223,6 @@ internal class AgentWebSocketClient : IDisposable
 
     private async Task ProcessPacket(Packet packet)
     {
-        SerializationContext serializationContext = new(EnumSerializationFormat.Int);
-
         switch (packet.Type)
         {
             case PacketType.Ping:
@@ -225,23 +242,22 @@ internal class AgentWebSocketClient : IDisposable
 
             case PacketType.ConnectionRejected:
                 {
-                    var connectionRejectedPayload = packet.GetPayload<ConnectionRejectedPayload>();
-                    Console.WriteLine($"[System] Connection rejected -> {connectionRejectedPayload.Reason}");
+                    var connectionRejected = packet.GetPayload<ConnectionRejected>();
+                    Console.WriteLine($"[System] Connection rejected -> {connectionRejected.Reason}");
                     break;
                 }
 
             case PacketType.LobbyData:
                 {
                     Console.WriteLine("[System] Lobby data received");
-                    var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.LobbyData.PlayerJsonConverter()]);
-                    var lobbyDataPayload = packet.GetPayload<LobbyDataPayload>(serializer);
+                    var lobbyData = packet.GetPayload<LobbyData>();
 
                     if (this.agent == null)
                     {
-                        this.agent = new Agent.Agent(new LobbyData(lobbyDataPayload));
-                        this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
+                        this.agent = new Agent.Agent(lobbyData);
+                        //this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
 
-                        if (lobbyDataPayload.ServerSettings.SandboxMode)
+                        if (lobbyData.ServerSettings.SandboxMode)
                         {
                             Console.WriteLine("[SYSTEM] Sandbox mode enabled");
 
@@ -253,11 +269,12 @@ internal class AgentWebSocketClient : IDisposable
                     }
                     else
                     {
-                        this.agent.OnSubsequentLobbyData(new LobbyData(lobbyDataPayload));
+                        this.agent.OnSubsequentLobbyData(lobbyData);
                     }
 
                     break;
                 }
+
 
             case PacketType.GameStarting:
                 {
@@ -304,18 +321,10 @@ internal class AgentWebSocketClient : IDisposable
                 {
                     try
                     {
-                        GameSerializationContext.Player gameSerializationContext = new(this.player!, EnumSerializationFormat.Int);
-                        var serializer = PacketSerializer.GetSerializer(GameStatePayload.GetConverters(gameSerializationContext));
-                        var gameStatePayload = packet.GetPayload<GameStatePayload.ForPlayer>(serializer);
+                        var gameState = packet.GetPayload<GameState>();
 
-                        AgentResponse agentResponse = this.agent!.NextMove(new GameState(gameStatePayload));
-
-                        // there is already field "GameStateId" in JObject but
-                        // when i do agentResponse.Payload["GameStateId"] it
-                        // trggers no game state id warnings.
-                        // Due to that there are two game state id fields
-                        // in the serialized responce.
-                        agentResponse.Payload["gameStateId"] = gameStatePayload.Id;
+                        AgentResponse agentResponse = this.agent!.NextMove(gameState);
+                        agentResponse.Payload["gameStateId"] = gameState.Id;
                         await this.SendMessageAsync(JsonConvert.SerializeObject(agentResponse));
                     }
                     catch (Exception e)
@@ -331,9 +340,8 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.GameEnded:
                 {
                     Console.WriteLine("[SYSTEM] Game ended!");
-                    var serializer = PacketSerializer.GetSerializer([new MonoTanksClientLogic.Networking.GameEnd.PlayerJsonConverter()]);
-                    GameEndPayload gameEndPayload = packet.GetPayload<GameEndPayload>(serializer);
-                    this.agent!.OnGameEnd(new GameEnd(gameEndPayload));
+                    var gameEnd = packet.GetPayload<GameEnd>();
+                    this.agent!.OnGameEnd(gameEnd);
                     break;
                 }
 
@@ -369,10 +377,11 @@ internal class AgentWebSocketClient : IDisposable
 
             case PacketType.CustomWarning:
                 {
-                    var customWarningPayload = packet.GetPayload<CustomWarningPayload>();
-                    this.agent!.OnWarningReceived(Warning.CustomWarning, customWarningPayload.Message);
+                    var customWarning = packet.GetPayload<CustomWarning>();
+                    this.agent!.OnWarningReceived(Warning.CustomWarning, customWarning.Message);
                     break;
                 }
+
 
             // Should never happen
             case PacketType.Pong: break;
