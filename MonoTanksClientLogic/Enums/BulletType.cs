@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a bullet type.
 /// </summary>
-internal enum BulletType
+public enum BulletType
 {
     /// <summary>
     /// Basic bullet type.
