@@ -9,12 +9,6 @@ namespace MonoTanksClientLogic.Networking;
 public class Packet
 {
     /// <summary>
-    /// Occurs when the payload could not
-    /// be converted to the specified type.
-    /// </summary>
-    internal static event Action<Exception>? GetPayloadFailed;
-
-    /// <summary>
     /// Gets the packet type.
     /// </summary>
     public PacketType Type { get; init; }
@@ -30,7 +24,6 @@ public class Packet
     /// <typeparam name="T">The specified payload type.</typeparam>
     /// <returns>The payload as the specified type.</returns>
     public T GetPayload<T>()
-        where T : IPacketPayload
     {
         try
         {
@@ -38,27 +31,6 @@ public class Packet
         }
         catch (Exception ex)
         {
-            GetPayloadFailed?.Invoke(ex);
-            throw;
-        }
-    }
-
-    /// <summary>
-    /// Gets the payload as the specified type.
-    /// </summary>
-    /// <typeparam name="T">The specified payload type.</typeparam>
-    /// <param name="serializer">The serializer to use.</param>
-    /// <returns>The payload as the specified type.</returns>
-    public T GetPayload<T>(JsonSerializer serializer)
-        where T : IPacketPayload
-    {
-        try
-        {
-            return this.Payload.ToObject<T>(serializer)!;
-        }
-        catch (Exception ex)
-        {
-            GetPayloadFailed?.Invoke(ex);
             throw;
         }
     }
