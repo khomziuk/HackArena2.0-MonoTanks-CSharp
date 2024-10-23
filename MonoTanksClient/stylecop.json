@@ -48,6 +48,7 @@
       "documentPrivateElements": false,
       "documentPrivateFields": false,
       "documentationCulture": "en-US",
+      "xmlHeader": false,
       "fileNamingConvention": "stylecop",
       "excludeFromPunctuationCheck": [
         "seealso"
