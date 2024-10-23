@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic;
+﻿namespace MonoTanksClientLogic.Enums;
 
 /// <summary>
 /// Represents a warning recieved from game server.

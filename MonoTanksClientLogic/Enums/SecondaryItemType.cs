@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic;
+﻿namespace MonoTanksClientLogic.Enums;
 
 /// <summary>
 /// Represents the type of secondary item that the tank can use.

@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic;
+﻿namespace MonoTanksClientLogic.Enums;
 
 public enum LaserDirection
 {
