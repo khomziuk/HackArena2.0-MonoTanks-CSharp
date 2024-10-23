@@ -1,4 +1,5 @@
-﻿using MonoTanksClientLogic.Networking;
+﻿using MonoTanksClientLogic.Enums;
+using MonoTanksClientLogic.Models;
 
 namespace MonoTanksClientLogic;
 

@@ -1,4 +1,6 @@
-﻿namespace MonoTanksClientLogic.Networking.Payloads;
+﻿using MonoTanksClientLogic.Enums;
+
+namespace MonoTanksClientLogic.Networking.Payloads;
 
 /// <summary>
 /// Represents an ability use payload.

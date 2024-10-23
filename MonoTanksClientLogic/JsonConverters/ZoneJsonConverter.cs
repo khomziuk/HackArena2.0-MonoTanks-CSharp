@@ -1,7 +1,7 @@
-﻿using MonoTanksClientLogic.Networking;
+﻿using MonoTanksClientLogic.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static MonoTanksClientLogic.Networking.ZoneStatus;
+using static MonoTanksClientLogic.Models.ZoneStatus;
 
 namespace MonoTanksClientLogic.JsonConverters;
 

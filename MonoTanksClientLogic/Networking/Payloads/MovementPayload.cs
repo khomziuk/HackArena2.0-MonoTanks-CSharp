@@ -1,5 +1,7 @@
 ﻿namespace MonoTanksClientLogic.Networking.Payloads
 {
+    using MonoTanksClientLogic.Enums;
+
     public class MovementPayload(MovementDirection direction)
     {
         public PacketType Type => PacketType.Movement;

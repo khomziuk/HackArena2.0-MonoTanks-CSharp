@@ -1,4 +1,4 @@
-﻿using MonoTanksClientLogic.Networking;
+﻿using MonoTanksClientLogic.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

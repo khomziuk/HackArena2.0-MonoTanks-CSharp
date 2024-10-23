@@ -1,6 +1,8 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
 using MonoTanksClientLogic;
+using MonoTanksClientLogic.Enums;
+using MonoTanksClientLogic.Models;
 using MonoTanksClientLogic.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -255,7 +257,6 @@ internal class AgentWebSocketClient : IDisposable
                     if (this.agent == null)
                     {
                         this.agent = new Agent.Agent(lobbyData);
-                        //this.player = lobbyDataPayload.Players.Find((player) => player.Id == lobbyDataPayload.PlayerId);
 
                         if (lobbyData.ServerSettings.SandboxMode)
                         {

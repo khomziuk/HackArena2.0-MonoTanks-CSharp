@@ -1,7 +1,7 @@
-﻿using MonoTanksClientLogic.Networking;
+﻿using MonoTanksClientLogic.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static MonoTanksClientLogic.Networking.Tile;
+using static MonoTanksClientLogic.Models.Tile;
 
 namespace MonoTanksClientLogic.JsonConverters;
 

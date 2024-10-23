@@ -1,4 +1,5 @@
-﻿using MonoTanksClientLogic.Networking;
+﻿using MonoTanksClientLogic.Enums;
+using MonoTanksClientLogic.Networking;
 using MonoTanksClientLogic.Networking.Payloads;
 using Newtonsoft.Json.Linq;
 
