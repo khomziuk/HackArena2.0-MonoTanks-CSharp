@@ -29,7 +29,7 @@ public class Packet
         {
             return this.Payload.ToObject<T>()!;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw;
         }

@@ -5,8 +5,12 @@ using static MonoTanksClientLogic.Models.Tile;
 
 namespace MonoTanksClientLogic.JsonConverters;
 
+/// <summary>
+/// Represents tile json converter.
+/// </summary>
 internal class TileJsonConverter : JsonConverter<Tile>
 {
+    /// <inheritdoc/>
     public override Tile? ReadJson(JsonReader reader, Type objectType, Tile? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jsonArray = JArray.Load(reader);
@@ -70,6 +74,7 @@ internal class TileJsonConverter : JsonConverter<Tile>
         return new Tile(entities.ToArray());
     }
 
+    /// <inheritdoc/>
     public override void WriteJson(JsonWriter writer, Tile? value, JsonSerializer serializer)
     {
         throw new NotSupportedException();

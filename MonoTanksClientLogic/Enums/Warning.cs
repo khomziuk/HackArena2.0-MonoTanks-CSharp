@@ -28,4 +28,3 @@ public enum Warning
     /// </summary>
     CustomWarning = 3,
 }
-

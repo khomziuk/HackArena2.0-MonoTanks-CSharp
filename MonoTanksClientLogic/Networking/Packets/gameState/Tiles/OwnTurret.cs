@@ -2,4 +2,10 @@
 
 namespace MonoTanksClientLogic.Models;
 
-public record class OwnTurret(Direction Direction, long bulletCount, double? ticksToRegenBullet);
+/// <summary>
+/// Represents turret of an player own tank.
+/// </summary>
+/// <param name="Direction">Represents turret direction.</param>
+/// <param name="BulletCount">Represents number of available bullets.</param>
+/// /// <param name="TicksToRegenBullet">Represents time in ticks to regenerate bullet.</param>
+public record class OwnTurret(Direction Direction, long BulletCount, double? TicksToRegenBullet);

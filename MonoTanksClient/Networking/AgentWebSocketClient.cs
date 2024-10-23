@@ -14,19 +14,16 @@ namespace MonoTanksClient.Networking;
 /// </summary>
 internal class AgentWebSocketClient : IDisposable
 {
-    private readonly IContractResolver ContractResolver = new CamelCasePropertyNamesContractResolver();
+    private readonly IContractResolver contractResolver = new CamelCasePropertyNamesContractResolver();
     private readonly uint incomingMessageBufferSize = 32 * 1024;
     private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1);
 
     private readonly ClientWebSocket clientWebSocket;
     private readonly Uri serverURI;
-    private Task? currentProcess;
 
 #if DEBUG
     private bool isFirstRecieved = false;
 #endif
-
-    //private Player? player;
 
     private IAgent? agent;
 
@@ -160,7 +157,7 @@ internal class AgentWebSocketClient : IDisposable
         {
             var settings = new JsonSerializerSettings()
             {
-                ContractResolver = ContractResolver,
+                ContractResolver = this.contractResolver,
             };
 
             packet = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRecieved), settings)!;
@@ -172,9 +169,7 @@ internal class AgentWebSocketClient : IDisposable
                     Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
                     this.isFirstRecieved = true;
                 }
-
             }
-
         }
         catch (Exception ex)
         {
@@ -275,7 +270,6 @@ internal class AgentWebSocketClient : IDisposable
 
                     break;
                 }
-
 
             case PacketType.GameStarting:
                 {
@@ -382,7 +376,6 @@ internal class AgentWebSocketClient : IDisposable
                     this.agent!.OnWarningReceived(Warning.CustomWarning, customWarning.Message);
                     break;
                 }
-
 
             // Should never happen
             case PacketType.Pong: break;

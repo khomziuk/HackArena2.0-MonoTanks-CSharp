@@ -2,10 +2,23 @@
 
 namespace MonoTanksClientLogic.Networking.Payloads;
 
+/// <summary>
+/// Represents rotation payload.
+/// </summary>
 public class RotationPayload
 {
+    /// <summary>
+    /// Gets packet type.
+    /// </summary>
     public PacketType Type => PacketType.Rotation;
 
+    /// <summary>
+    /// Gets game state id.
+    /// </summary>
+    /// <remarks>
+    /// GameStateId is required in all agent responces.
+    /// This framework automatically sets correct GameStateId.
+    /// </remarks>
     public string? GameStateId { get; init; }
 
     /// <summary>

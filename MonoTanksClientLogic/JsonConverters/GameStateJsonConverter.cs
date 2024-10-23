@@ -4,8 +4,12 @@ using Newtonsoft.Json.Linq;
 
 namespace MonoTanksClientLogic.JsonConverters;
 
+/// <summary>
+/// Represents game state json converter.
+/// </summary>
 internal class GameStateJsonConverter : JsonConverter<GameState>
 {
+    /// <inheritdoc/>
     public override GameState? ReadJson(JsonReader reader, Type objectType, GameState? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         var jsonObject = JObject.Load(reader);
@@ -42,6 +46,7 @@ internal class GameStateJsonConverter : JsonConverter<GameState>
         return new GameState(id, tick, players.ToArray(), map, zones.ToArray());
     }
 
+    /// <inheritdoc/>
     public override void WriteJson(JsonWriter writer, GameState? value, JsonSerializer serializer)
     {
         throw new NotSupportedException();
