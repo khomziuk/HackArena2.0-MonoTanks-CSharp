@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN dotnet build HackArena2024H2-CSharp.sln
+RUN dotnet build HackArena2024H2-CSharp.sln -c Release
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
