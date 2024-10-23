@@ -1,7 +1,8 @@
-﻿using MonoTanksClientLogic.JsonConverters;
+﻿using MonoTanksClientLogic.Enums;
+using MonoTanksClientLogic.JsonConverters;
 using Newtonsoft.Json;
 
-namespace MonoTanksClientLogic.Networking;
+namespace MonoTanksClientLogic.Models;
 
 [JsonConverter(typeof(TileJsonConverter))]
 public record class Tile(Tile.TileEntity[] Entities)

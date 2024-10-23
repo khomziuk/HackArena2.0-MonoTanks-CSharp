@@ -1,7 +1,10 @@
-﻿using MonoTanksClientLogic.JsonConverters;
+﻿using MonoTanksClientLogic;
+using MonoTanksClientLogic.Enums;
+using MonoTanksClientLogic.JsonConverters;
+using MonoTanksClientLogic.Networking;
 using Newtonsoft.Json;
 
-namespace MonoTanksClientLogic.Networking;
+namespace MonoTanksClientLogic.Models;
 
 [JsonConverter(typeof(GameStateJsonConverter))]
 public record class GameState(

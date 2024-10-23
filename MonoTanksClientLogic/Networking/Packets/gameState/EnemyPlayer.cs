@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Networking;
+﻿namespace MonoTanksClientLogic.Models;
 
 public record class EnemyPlayer(
 string Id,

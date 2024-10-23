@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Networking.Packets;
+﻿namespace MonoTanksClientLogic.Models;
 
 public record class OwnPlayer(
     string Id,

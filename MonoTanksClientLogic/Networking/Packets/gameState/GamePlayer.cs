@@ -1,7 +1,7 @@
 ﻿using MonoTanksClientLogic.JsonConverters;
 using Newtonsoft.Json;
 
-namespace MonoTanksClientLogic.Networking;
+namespace MonoTanksClientLogic.Models;
 
 [JsonConverter(typeof(GamePlayerJsonConverter))]
 public abstract record class GamePlayer(

@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Networking;
+﻿namespace MonoTanksClientLogic.Models;
 
 public abstract record class ZoneStatus
 {

@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Networking;
+﻿namespace MonoTanksClientLogic.Models;
 
 /// <summary>
 /// Represents the server settings.
