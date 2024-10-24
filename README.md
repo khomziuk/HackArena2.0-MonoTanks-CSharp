@@ -1,7 +1,7 @@
 # C# WebSocket Client for HackArena 2.0
 
 This C#-based WebSocket client was developed for the HackArena 2.0, organized
-by WULS-SGGW. It serves as a api wrapper for participants to create AI bots that
+by kn init. It serves as a api wrapper for participants to create AI bots that
 can play the game.
 
 To fully test and run the game, you will also need the game server and GUI
