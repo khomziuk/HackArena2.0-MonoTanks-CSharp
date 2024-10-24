@@ -1,7 +1,6 @@
 ﻿using MonoTanksClientLogic;
 using MonoTanksClientLogic.Enums;
 using MonoTanksClientLogic.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace Agent;
 

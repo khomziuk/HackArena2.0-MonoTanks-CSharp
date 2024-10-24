@@ -1,7 +1,4 @@
-﻿using MonoTanksClientLogic;
-using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.JsonConverters;
-using MonoTanksClientLogic.Networking;
+﻿using MonoTanksClientLogic.JsonConverters;
 using Newtonsoft.Json;
 
 namespace MonoTanksClientLogic.Models;

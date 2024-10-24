@@ -1,6 +1,4 @@
-﻿using MonoTanksClientLogic.Networking;
-
-namespace MonoTanksClientLogic.Models;
+﻿namespace MonoTanksClientLogic.Models;
 
 /// <summary>
 /// Represents lobby data.
