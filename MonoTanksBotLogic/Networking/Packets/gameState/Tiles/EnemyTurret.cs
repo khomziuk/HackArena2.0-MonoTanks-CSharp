@@ -1,6 +1,6 @@
-﻿using MonoTanksClientLogic.Enums;
+﻿using MonoTanksBotLogic.Enums;
 
-namespace MonoTanksClientLogic.Models;
+namespace MonoTanksBotLogic.Models;
 
 /// <summary>
 /// Represents turret of an enemy tank.

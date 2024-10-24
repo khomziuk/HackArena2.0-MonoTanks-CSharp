@@ -1,7 +1,7 @@
-﻿using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.Models;
+﻿using MonoTanksBotLogic.Enums;
+using MonoTanksBotLogic.Models;
 
-namespace MonoTanksClientLogic;
+namespace MonoTanksBotLogic;
 
 /// <summary>
 /// Represents required methods for bot.

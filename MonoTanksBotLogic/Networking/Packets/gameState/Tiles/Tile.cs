@@ -1,8 +1,8 @@
-﻿using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.JsonConverters;
+﻿using MonoTanksBotLogic.Enums;
+using MonoTanksBotLogic.JsonConverters;
 using Newtonsoft.Json;
 
-namespace MonoTanksClientLogic.Models;
+namespace MonoTanksBotLogic.Models;
 
 /// <summary>
 /// Represents tile.

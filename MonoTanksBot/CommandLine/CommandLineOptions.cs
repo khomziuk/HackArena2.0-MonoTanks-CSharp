@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace MonoTanksClient.CommandLine;
+namespace MonoTanksBot.CommandLine;
 
 /// <summary>
 /// Represents command line options.

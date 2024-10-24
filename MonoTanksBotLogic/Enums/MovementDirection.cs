@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Enums;
+﻿namespace MonoTanksBotLogic.Enums;
 
 /// <summary>
 /// Represents the movement direction of the tank.

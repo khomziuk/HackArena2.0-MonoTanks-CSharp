@@ -1,8 +1,8 @@
-﻿using MonoTanksClientLogic.Models;
+﻿using MonoTanksBotLogic.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MonoTanksClientLogic.JsonConverters;
+namespace MonoTanksBotLogic.JsonConverters;
 
 /// <summary>
 /// Represents game player json converter.

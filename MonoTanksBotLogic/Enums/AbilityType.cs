@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Enums;
+﻿namespace MonoTanksBotLogic.Enums;
 
 /// <summary>
 /// Represents the type of ability that the tank can use.

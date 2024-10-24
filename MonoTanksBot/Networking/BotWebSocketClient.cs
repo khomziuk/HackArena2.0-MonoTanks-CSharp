@@ -1,13 +1,13 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
-using MonoTanksClientLogic;
-using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.Models;
-using MonoTanksClientLogic.Networking;
+using MonoTanksBotLogic;
+using MonoTanksBotLogic.Enums;
+using MonoTanksBotLogic.Models;
+using MonoTanksBotLogic.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace MonoTanksClient.Networking;
+namespace MonoTanksBot.Networking;
 
 /// <summary>
 /// Represents custom web socket client that comunicates bot with game server.

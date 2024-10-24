@@ -1,9 +1,9 @@
-﻿using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.Networking;
-using MonoTanksClientLogic.Networking.Payloads;
+﻿using MonoTanksBotLogic.Enums;
+using MonoTanksBotLogic.Networking;
+using MonoTanksBotLogic.Networking.Payloads;
 using Newtonsoft.Json.Linq;
 
-namespace MonoTanksClientLogic;
+namespace MonoTanksBotLogic;
 
 /// <summary>
 /// Represents bot response.

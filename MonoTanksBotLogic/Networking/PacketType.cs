@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Networking;
+﻿namespace MonoTanksBotLogic.Networking;
 
 /// <summary>
 /// Represents a packet type.

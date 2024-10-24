@@ -1,9 +1,9 @@
-﻿using MonoTanksClientLogic.Models;
+﻿using MonoTanksBotLogic.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static MonoTanksClientLogic.Models.Tile;
+using static MonoTanksBotLogic.Models.Tile;
 
-namespace MonoTanksClientLogic.JsonConverters;
+namespace MonoTanksBotLogic.JsonConverters;
 
 /// <summary>
 /// Represents tile json converter.

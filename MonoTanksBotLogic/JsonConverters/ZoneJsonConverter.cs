@@ -1,9 +1,9 @@
-﻿using MonoTanksClientLogic.Models;
+﻿using MonoTanksBotLogic.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static MonoTanksClientLogic.Models.ZoneStatus;
+using static MonoTanksBotLogic.Models.ZoneStatus;
 
-namespace MonoTanksClientLogic.JsonConverters;
+namespace MonoTanksBotLogic.JsonConverters;
 
 /// <summary>
 /// Represents zone json converter.

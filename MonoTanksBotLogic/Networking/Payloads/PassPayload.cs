@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Networking.Payloads;
+﻿namespace MonoTanksBotLogic.Networking.Payloads;
 
 /// <summary>
 /// Represents pass payload.

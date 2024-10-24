@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace MonoTanksClientLogic.Networking;
+namespace MonoTanksBotLogic.Networking;
 
 /// <summary>
 /// Represents a packet.

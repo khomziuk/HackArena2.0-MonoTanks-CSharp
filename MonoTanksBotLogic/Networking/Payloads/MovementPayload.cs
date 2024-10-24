@@ -1,6 +1,6 @@
-﻿namespace MonoTanksClientLogic.Networking.Payloads
+﻿namespace MonoTanksBotLogic.Networking.Payloads
 {
-    using MonoTanksClientLogic.Enums;
+    using MonoTanksBotLogic.Enums;
 
     /// <summary>
     /// Represents movement payload.

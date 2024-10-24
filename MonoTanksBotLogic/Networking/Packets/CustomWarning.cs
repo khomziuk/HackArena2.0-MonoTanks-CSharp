@@ -1,4 +1,4 @@
-﻿namespace MonoTanksClientLogic.Models;
+﻿namespace MonoTanksBotLogic.Models;
 
 /// <summary>
 /// Represents custom warning.

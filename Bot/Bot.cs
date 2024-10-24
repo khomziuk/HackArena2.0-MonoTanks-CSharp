@@ -1,6 +1,6 @@
-﻿using MonoTanksClientLogic;
-using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.Models;
+﻿using MonoTanksBotLogic;
+using MonoTanksBotLogic.Enums;
+using MonoTanksBotLogic.Models;
 
 namespace Bot;
 

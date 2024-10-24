@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
-using MonoTanksClient.CommandLine;
-using MonoTanksClient.Networking;
+using MonoTanksBot.CommandLine;
+using MonoTanksBot.Networking;
 
 string host = "localhost";
 string port = "5000";

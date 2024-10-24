@@ -1,6 +1,6 @@
-﻿using MonoTanksClientLogic.Enums;
+﻿using MonoTanksBotLogic.Enums;
 
-namespace MonoTanksClientLogic.Networking.Payloads;
+namespace MonoTanksBotLogic.Networking.Payloads;
 
 /// <summary>
 /// Represents rotation payload.
