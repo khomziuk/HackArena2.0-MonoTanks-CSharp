@@ -29,4 +29,5 @@ public record class ServerSettings(
     int BroadcastInterval,
     bool SandboxMode,
     bool EagerBroadcast,
-    string? MatchName);
+    string? MatchName,
+    string Version);
