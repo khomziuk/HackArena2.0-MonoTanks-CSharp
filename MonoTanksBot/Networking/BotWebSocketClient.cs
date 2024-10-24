@@ -21,10 +21,6 @@ internal class BotWebSocketClient : IDisposable
     private readonly ClientWebSocket clientWebSocket;
     private readonly Uri serverURI;
 
-#if DEBUG
-    private bool isFirstRecieved = false;
-#endif
-
     private IBot? bot;
 
     /// <summary>
@@ -161,15 +157,6 @@ internal class BotWebSocketClient : IDisposable
             };
 
             packet = JsonConvert.DeserializeObject<Packet>(Encoding.UTF8.GetString(buffer, 0, bytesRecieved), settings)!;
-
-            if (packet.Type == PacketType.GameState)
-            {
-                if (this.isFirstRecieved == false)
-                {
-                    Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, bytesRecieved));
-                    this.isFirstRecieved = true;
-                }
-            }
         }
         catch (Exception ex)
         {
