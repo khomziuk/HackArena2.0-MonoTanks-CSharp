@@ -6,24 +6,24 @@ using Newtonsoft.Json.Linq;
 namespace MonoTanksClientLogic;
 
 /// <summary>
-/// Represents agent response.
+/// Represents bot response.
 /// </summary>
-public class AgentResponse() : Packet
+public class BotResponse() : Packet
 {
     /// <summary>
     /// Represents pass response.
     /// </summary>
     /// <remarks>
-    /// Use this method to return pass action for your agent.
+    /// Use this method to return pass action for your bot.
     /// Pass means that bot will do nothing for one game tick.
     /// </remarks>
     /// <returns>
-    /// AgentResponse representing pass action.
+    /// BotResponse representing pass action.
     /// </returns>
-    public static AgentResponse Pass()
+    public static BotResponse Pass()
     {
         PassPayload passPayload = new();
-        return new AgentResponse()
+        return new BotResponse()
         {
             Type = passPayload.Type,
             Payload = JObject.FromObject(passPayload),
@@ -37,16 +37,16 @@ public class AgentResponse() : Packet
     /// Represents tank movement direction.
     /// </param>
     /// <remarks>
-    /// Use this method to return move action for your agent.
+    /// Use this method to return move action for your bot.
     /// Move will change position of your tank one tile in specified direction.
     /// </remarks>
     /// <returns>
-    /// AgentResponse representing move action.
+    /// BotResponse representing move action.
     /// </returns>
-    public static AgentResponse Move(MovementDirection tankMovement)
+    public static BotResponse Move(MovementDirection tankMovement)
     {
         MovementPayload movementPayload = new(tankMovement);
-        return new AgentResponse()
+        return new BotResponse()
         {
             Type = movementPayload.Type,
             Payload = JObject.FromObject(movementPayload),
@@ -63,21 +63,21 @@ public class AgentResponse() : Packet
     /// Represents turret rotation direction.
     /// </param>
     /// <remarks>
-    /// Use this method to return rotate action for your agent.
+    /// Use this method to return rotate action for your bot.
     /// Rotate will move both tank and turret in the same tick.
     /// Passing null as rotation will result in no rotation of tank or turret.
     /// </remarks>
     /// <returns>
-    /// AgentResponse representing Rotate action.
+    /// BotResponse representing Rotate action.
     /// </returns>
-    public static AgentResponse Rotate(Rotation? tankRotation, Rotation? turretRotation)
+    public static BotResponse Rotate(Rotation? tankRotation, Rotation? turretRotation)
     {
         RotationPayload rotationPayload = new()
         {
             TankRotation = tankRotation,
             TurretRotation = turretRotation,
         };
-        return new AgentResponse()
+        return new BotResponse()
         {
             Type = rotationPayload.Type,
             Payload = JObject.FromObject(rotationPayload),
@@ -91,16 +91,16 @@ public class AgentResponse() : Packet
     /// Represents ability type.
     /// </param>
     /// <remarks>
-    /// Use this method to return use ability action for your agent.
+    /// Use this method to return use ability action for your bot.
     /// Use ability will use one of available abilities.
     /// </remarks>
     /// <returns>
-    /// AgentResponse representing UseAbility action.
+    /// BotResponse representing UseAbility action.
     /// </returns>
-    public static AgentResponse UseAbility(AbilityType abilityType)
+    public static BotResponse UseAbility(AbilityType abilityType)
     {
         UseAbilityPayload abilityUsePayload = new(abilityType);
-        return new AgentResponse()
+        return new BotResponse()
         {
             Type = abilityUsePayload.Type,
             Payload = JObject.FromObject(abilityUsePayload),

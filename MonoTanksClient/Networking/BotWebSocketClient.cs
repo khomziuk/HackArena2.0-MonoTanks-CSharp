@@ -10,9 +10,9 @@ using Newtonsoft.Json.Serialization;
 namespace MonoTanksClient.Networking;
 
 /// <summary>
-/// Represents custom web socket client that comunicates agent with game server.
+/// Represents custom web socket client that comunicates bot with game server.
 /// </summary>
-internal class AgentWebSocketClient : IDisposable
+internal class BotWebSocketClient : IDisposable
 {
     private readonly IContractResolver contractResolver = new CamelCasePropertyNamesContractResolver();
     private readonly uint incomingMessageBufferSize = 32 * 1024;
@@ -25,16 +25,16 @@ internal class AgentWebSocketClient : IDisposable
     private bool isFirstRecieved = false;
 #endif
 
-    private IAgent? agent;
+    private IBot? bot;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AgentWebSocketClient"/> class.
+    /// Initializes a new instance of the <see cref="BotWebSocketClient"/> class.
     /// </summary>
     /// <param name="host">Represents host of a WebSocket server.</param>
     /// <param name="port">Represents port of a WebSocket server.</param>
-    /// <param name="nickname">Represents nickname of agent.</param>
+    /// <param name="nickname">Represents nickname of bot.</param>
     /// <param name="code">Represents join code.</param>
-    public AgentWebSocketClient(string host = "localhost", string port = "5000", string nickname = "", string code = "")
+    public BotWebSocketClient(string host = "localhost", string port = "5000", string nickname = "", string code = "")
     {
         this.clientWebSocket = new ClientWebSocket();
 
@@ -70,7 +70,7 @@ internal class AgentWebSocketClient : IDisposable
     }
 
     /// <summary>
-    ///  Close the <see cref="AgentWebSocketClient" /> instance as an asynchronous operation.
+    ///  Close the <see cref="BotWebSocketClient" /> instance as an asynchronous operation.
     /// </summary>
     /// <returns>The task object representing the asynchronous operation.</returns>
     public async Task CloseAsync()
@@ -249,9 +249,9 @@ internal class AgentWebSocketClient : IDisposable
                     Console.WriteLine("[System] Lobby data received");
                     var lobbyData = packet.GetPayload<LobbyData>();
 
-                    if (this.agent == null)
+                    if (this.bot == null)
                     {
-                        this.agent = new Agent.Agent(lobbyData);
+                        this.bot = new Bot.Bot(lobbyData);
 
                         if (lobbyData.ServerSettings.SandboxMode)
                         {
@@ -265,7 +265,7 @@ internal class AgentWebSocketClient : IDisposable
                     }
                     else
                     {
-                        this.agent.OnSubsequentLobbyData(lobbyData);
+                        this.bot.OnSubsequentLobbyData(lobbyData);
                     }
 
                     break;
@@ -275,9 +275,9 @@ internal class AgentWebSocketClient : IDisposable
                 {
                     Console.WriteLine("[System] Game starting");
 
-                    if (this.agent == null)
+                    if (this.bot == null)
                     {
-                        while (this.agent == null)
+                        while (this.bot == null)
                         {
                             try
                             {
@@ -286,7 +286,7 @@ internal class AgentWebSocketClient : IDisposable
                             catch (ThreadInterruptedException e)
                             {
                                 Thread.CurrentThread.Interrupt();
-                                Console.WriteLine("[ERROR] Interrupted while waiting for agent initialization.");
+                                Console.WriteLine("[ERROR] Interrupted while waiting for bot initialization.");
                                 Console.WriteLine($"[^^^^^] {e.Message}");
                             }
                         }
@@ -295,7 +295,7 @@ internal class AgentWebSocketClient : IDisposable
                         {
                             Packet readyToReceivePacket = new Packet() { Type = PacketType.ReadyToReceiveGameState, Payload = [] };
                             await this.SendMessageAsync(JsonConvert.SerializeObject(readyToReceivePacket));
-                            Console.WriteLine("[SYSTEM] Sent ReadyToReceiveGameState after agent initialization.");
+                            Console.WriteLine("[SYSTEM] Sent ReadyToReceiveGameState after bot initialization.");
                         }
                         catch (Exception e)
                         {
@@ -318,9 +318,9 @@ internal class AgentWebSocketClient : IDisposable
                     {
                         var gameState = packet.GetPayload<GameState>();
 
-                        AgentResponse agentResponse = this.agent!.NextMove(gameState);
-                        agentResponse.Payload["gameStateId"] = gameState.Id;
-                        await this.SendMessageAsync(JsonConvert.SerializeObject(agentResponse));
+                        BotResponse botResponse = this.bot!.NextMove(gameState);
+                        botResponse.Payload["gameStateId"] = gameState.Id;
+                        await this.SendMessageAsync(JsonConvert.SerializeObject(botResponse));
                     }
                     catch (Exception e)
                     {
@@ -336,25 +336,25 @@ internal class AgentWebSocketClient : IDisposable
                 {
                     Console.WriteLine("[SYSTEM] Game ended!");
                     var gameEnd = packet.GetPayload<GameEnd>();
-                    this.agent!.OnGameEnd(gameEnd);
+                    this.bot!.OnGameEnd(gameEnd);
                     break;
                 }
 
             case PacketType.PlayerAlreadyMadeActionWarning:
                 {
-                    this.agent!.OnWarningReceived(Warning.PlayerAlreadyMadeActionWarning, null);
+                    this.bot!.OnWarningReceived(Warning.PlayerAlreadyMadeActionWarning, null);
                     break;
                 }
 
             case PacketType.SlowResponseWarning:
                 {
-                    this.agent!.OnWarningReceived(Warning.SlowResponseWarning, null);
+                    this.bot!.OnWarningReceived(Warning.SlowResponseWarning, null);
                     break;
                 }
 
             case PacketType.ActionIgnoredDueToDeadWarning:
                 {
-                    this.agent!.OnWarningReceived(Warning.ActionIgnoredDueToDeadWarning, null);
+                    this.bot!.OnWarningReceived(Warning.ActionIgnoredDueToDeadWarning, null);
                     break;
                 }
 
@@ -373,7 +373,7 @@ internal class AgentWebSocketClient : IDisposable
             case PacketType.CustomWarning:
                 {
                     var customWarning = packet.GetPayload<CustomWarning>();
-                    this.agent!.OnWarningReceived(Warning.CustomWarning, customWarning.Message);
+                    this.bot!.OnWarningReceived(Warning.CustomWarning, customWarning.Message);
                     break;
                 }
 

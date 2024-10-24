@@ -4,16 +4,16 @@ using MonoTanksClientLogic.Models;
 namespace MonoTanksClientLogic;
 
 /// <summary>
-/// Represents required methods for agent.
+/// Represents required methods for bot.
 /// </summary>
-public interface IAgent
+public interface IBot
 {
     /// <summary>
     /// Represents game start callback.
     /// </summary>
     /// <remarks>
     /// This method will be called in your
-    /// agent exactly one at start of each game.
+    /// bot exactly one at start of each game.
     /// </remarks>
     public void OnGameStarting();
 
@@ -22,16 +22,16 @@ public interface IAgent
     /// </summary>
     /// <remarks>
     /// This method will be called in your
-    /// agent every game tick. Agent response will be used
-    /// to control your agent in game.
+    /// bot every game tick. Bot response will be used
+    /// to control your bot in game.
     /// </remarks>
     /// <param name="gameState">
     /// Represents curret game state.
     /// </param>
     /// <returns>
-    /// AgentResponse representing next move.
+    /// BotResponse representing next move.
     /// </returns>
-    public AgentResponse NextMove(GameState gameState);
+    public BotResponse NextMove(GameState gameState);
 
     /// <summary>
     /// Represents game end callback.
@@ -41,7 +41,7 @@ public interface IAgent
     /// </param>
     /// <remarks>
     /// This method will be called in your
-    /// agent exactly one at end of each game.
+    /// bot exactly one at end of each game.
     /// </remarks>
     public void OnGameEnd(GameEnd gameEnd);
 
@@ -68,7 +68,7 @@ public interface IAgent
     /// </param>
     /// <remarks>
     /// This function will be called every time game server
-    /// sends warning to your agent.
+    /// sends warning to your bot.
     /// </remarks>
     public void OnWarningReceived(Warning warning, string? message);
 }

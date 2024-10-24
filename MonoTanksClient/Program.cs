@@ -56,6 +56,6 @@ _ = parserResult.WithNotParsed<CommandLineOptions>((err) =>
     }
 });
 
-AgentWebSocketClient client = new(host, port, nickname, code);
+BotWebSocketClient client = new(host, port, nickname, code);
 
 await client.ConnectAsync();

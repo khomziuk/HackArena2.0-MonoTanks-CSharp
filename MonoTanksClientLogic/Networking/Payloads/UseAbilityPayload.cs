@@ -17,7 +17,7 @@ public class UseAbilityPayload(AbilityType abilityType)
     /// Gets game state id.
     /// </summary>
     /// <remarks>
-    /// GameStateId is required in all agent responces.
+    /// GameStateId is required in all bot responces.
     /// This framework automatically sets correct GameStateId.
     /// </remarks>
     public string? GameStateId { get; init; }

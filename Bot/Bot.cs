@@ -2,20 +2,20 @@
 using MonoTanksClientLogic.Enums;
 using MonoTanksClientLogic.Models;
 
-namespace Agent;
+namespace Bot;
 
-public class Agent : IAgent
+public class Bot : IBot
 {
     private string myId;
 
-    public Agent(LobbyData lobbyData)
+    public Bot(LobbyData lobbyData)
     {
         this.myId = lobbyData.PlayerId;
     }
 
     public void OnSubsequentLobbyData(LobbyData lobbyData) { }
 
-    public AgentResponse NextMove(GameState gameState)
+    public BotResponse NextMove(GameState gameState)
     {
         Console.WriteLine("Map:");
         for (int y = 0; y < gameState.Map.GetLength(0); y++)
@@ -116,28 +116,28 @@ public class Agent : IAgent
             Console.Write("\n");
         }
 
-        //Bot that randomly choses one of all possible agent responses.
+        //Bot that randomly choses one of all possible bot responses.
         var rand = new Random();
         return rand.Next(0, 18) switch
         {
-            0 => AgentResponse.Pass(),
-            1 => AgentResponse.Move(MovementDirection.Backward),
-            2 => AgentResponse.Move(MovementDirection.Forward),
-            3 => AgentResponse.Rotate(null, null),
-            4 => AgentResponse.Rotate(null, Rotation.Left),
-            5 => AgentResponse.Rotate(null, Rotation.Right),
-            6 => AgentResponse.Rotate(Rotation.Left, null),
-            7 => AgentResponse.Rotate(Rotation.Left, Rotation.Left),
-            8 => AgentResponse.Rotate(Rotation.Left, Rotation.Right),
-            9 => AgentResponse.Rotate(Rotation.Right, null),
-            10 => AgentResponse.Rotate(Rotation.Right, null),
-            11 => AgentResponse.Rotate(Rotation.Right, Rotation.Left),
-            12 => AgentResponse.Rotate(Rotation.Right, Rotation.Right),
-            13 => AgentResponse.UseAbility(AbilityType.DropMine),
-            14 => AgentResponse.UseAbility(AbilityType.FireBullet),
-            15 => AgentResponse.UseAbility(AbilityType.FireDoubleBullet),
-            16 => AgentResponse.UseAbility(AbilityType.UseLaser),
-            17 => AgentResponse.UseAbility(AbilityType.UseRadar),
+            0 => BotResponse.Pass(),
+            1 => BotResponse.Move(MovementDirection.Backward),
+            2 => BotResponse.Move(MovementDirection.Forward),
+            3 => BotResponse.Rotate(null, null),
+            4 => BotResponse.Rotate(null, Rotation.Left),
+            5 => BotResponse.Rotate(null, Rotation.Right),
+            6 => BotResponse.Rotate(Rotation.Left, null),
+            7 => BotResponse.Rotate(Rotation.Left, Rotation.Left),
+            8 => BotResponse.Rotate(Rotation.Left, Rotation.Right),
+            9 => BotResponse.Rotate(Rotation.Right, null),
+            10 => BotResponse.Rotate(Rotation.Right, null),
+            11 => BotResponse.Rotate(Rotation.Right, Rotation.Left),
+            12 => BotResponse.Rotate(Rotation.Right, Rotation.Right),
+            13 => BotResponse.UseAbility(AbilityType.DropMine),
+            14 => BotResponse.UseAbility(AbilityType.FireBullet),
+            15 => BotResponse.UseAbility(AbilityType.FireDoubleBullet),
+            16 => BotResponse.UseAbility(AbilityType.UseLaser),
+            17 => BotResponse.UseAbility(AbilityType.UseRadar),
             _ => throw new NotSupportedException(),
         };
     }
