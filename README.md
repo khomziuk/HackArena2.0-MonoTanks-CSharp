@@ -1,14 +1,14 @@
-# C# WebSocket Client for Hackathon 2024
+# C# WebSocket Client for HackArena 2.0
 
-This C#-based WebSocket client was developed for the Hackathon 2024, organized
-by WULS-SGGW. It serves as a framework for participants to create AI bots that
+This C#-based WebSocket client was developed for the HackArena 2.0, organized
+by WULS-SGGW. It serves as a api wrapper for participants to create AI bots that
 can play the game.
 
 To fully test and run the game, you will also need the game server and GUI
 client, as the GUI provides a visual representation of gameplay. You can find
 more information about the server and GUI client in the following repository:
 
-- [Server and GUI Client Repository](https://github.com/INIT-SGGW/HackArena2024H2-Game)
+- [Server and GUI Client Repository](https://github.com/INIT-SGGW/HackArena2.0-MonoTanks)
 
 ## Development
 
@@ -16,9 +16,9 @@ The bot logic you are going to implement is located in
 `Bot/Bot.cs`:
 
 ```C#
-using MonoTanksClientLogic;
-using MonoTanksClientLogic.Enums;
-using MonoTanksClientLogic.Models;
+using MonoTanksBotLogic;
+using MonoTanksBotLogic.Enums;
+using MonoTanksBotLogic.Models;
 
 namespace Bot;
 
@@ -96,9 +96,9 @@ into the Docker image and will be accessible to your application at runtime.
 For example, you could include configuration files, pre-trained models, or any
 other data your bot might need.
 
-## Running the Client
+## Running the bot
 
-You can run this client in three different ways: locally, within a VS Code
+You can run this bot in three different ways: locally, within a VS Code
 development container, or manually using Docker.
 
 ### 1. Running locally (on Windows using Visual Studio).
@@ -106,7 +106,7 @@ Simply open project in Visual Studio and use IDE interface to run and debug your
 
 ### 2. Running locally (on Linux or in other IDEs)
 
-To run the client locally, you must have dotnet SDK 8.0 or later installed and dotnet runtime 8.0 or later. <br><br>
+To run the bot locally, you must have dotnet SDK 8.0 or later installed and dotnet runtime 8.0 or later. <br><br>
 Verify your dotnet SDK version by running:
 ```sh
 dotnet --list-sdks
@@ -126,33 +126,33 @@ dotnet build HackArena2024H2-CSharp.sln -c Release
 ```
 
 Assuming the game server is running on `localhost:5000` (refer to the server
-repository's README for setup instructions), start the client by running in build directory `MonoTanksClient/bin/Debug/net8.0`:
+repository's README for setup instructions), start the bot by running in build directory `MonoTanksBot/bin/Debug/net8.0`:
 
 ```sh
-./MonoTanksClient --nickname TEAM_NAME
+./MonoTanksBot -n TEAM_NAME
 ```
 
-The `--nickname` argument is required and must be unique. For additional
+The `-n` argument is required and must be unique. For additional
 configuration options, run:
 
 ```sh
-./MonoTanksClient --help
+./MonoTanksBot --help
 ```
 
 ### 3. Running in a Docker Container (Manual Setup)
 
-To run the client manually in a Docker container, ensure Docker is installed on
+To run the bot manually in a Docker container, ensure Docker is installed on
 your system.
 
 Steps:
 
 1. Build the Docker image:
    ```sh
-   docker build -t client .
+   docker build -t bot .
    ```
 2. Run the Docker container:
    ```sh
-   docker run --rm client --host host.docker.internal --nickname TEAM_NAME
+   docker run --rm bot --host host.docker.internal --nickname TEAM_NAME
    ```
 
 If the server is running on your local machine, use the
