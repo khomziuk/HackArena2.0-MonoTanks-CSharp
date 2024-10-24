@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MonoTanksBotLogic\MonoTanksBotLogic.csproj" />
     <ProjectReference Include="..\MonoTanksClientLogic\MonoTanksClientLogic.csproj" />
   </ItemGroup>
 
