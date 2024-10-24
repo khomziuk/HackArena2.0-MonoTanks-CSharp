@@ -67,5 +67,11 @@ public record class Tile(Tile.TileEntity[] Entities)
     /// </summary>
     /// <param name="Id">Represents mine id.</param>
     /// <param name="ExplosionRemainingTicks">Represents remaining ticks to explosion.</param>
-    public record class Mine(long Id, int ExplosionRemainingTicks) : TileEntity;
+    /// <remarks>
+    /// <para>
+    /// The value is <see langword="null"/>
+    /// if the mine hasn't exploded yet.
+    /// </para>
+    /// </remarks>
+    public record class Mine(long Id, int? ExplosionRemainingTicks) : TileEntity;
 }
