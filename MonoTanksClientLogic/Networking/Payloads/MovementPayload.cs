@@ -18,7 +18,7 @@
         /// </summary>
         /// <remarks>
         /// GameStateId is required in all bot responces.
-        /// This framework automatically sets correct GameStateId.
+        /// This api wrapper automatically sets correct GameStateId.
         /// </remarks>
         public string? GameStateId { get; init; }
 
