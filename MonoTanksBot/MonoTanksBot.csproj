@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bot\Bot.csproj" />
+    <ProjectReference Include="..\MonoTanksBotLogic\MonoTanksBotLogic.csproj" />
     <ProjectReference Include="..\MonoTanksClientLogic\MonoTanksClientLogic.csproj" />
   </ItemGroup>
 
