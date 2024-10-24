@@ -7,10 +7,12 @@ namespace MonoTanksClientLogic.Models;
 /// <summary>
 /// Represents tile.
 /// </summary>
+/// <param name="IsVisible">Represents if tile is visible in fog of war.</param>
+/// <param name="ZoneIndex">Represents zone index in witch tile is located.</param>
 /// <param name="Entities">Represents entities in a tile.</param>
 
 [JsonConverter(typeof(TileJsonConverter))]
-public record class Tile(Tile.TileEntity[] Entities)
+public record class Tile(bool IsVisible, int? ZoneIndex, Tile.TileEntity[] Entities)
 {
     /// <summary>
     /// Represents base tile entity.
@@ -24,6 +26,7 @@ public record class Tile(Tile.TileEntity[] Entities)
 
     /// <summary>
     /// Represents enemy tank tile entity.
+    /// 
     /// </summary>
     /// <param name="Direction">Represents direction of an enemy tank.</param>
     /// <param name="OwnerId">Represents owner id of an enemy tank.</param>

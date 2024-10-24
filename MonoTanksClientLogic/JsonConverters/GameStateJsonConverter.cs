@@ -16,6 +16,7 @@ internal class GameStateJsonConverter : JsonConverter<GameState>
 
         var id = jsonObject["id"]!.ToObject<string>()!;
         var tick = jsonObject["tick"]!.ToObject<float>();
+        var rawMap = jsonObject["map"]!;
 
         List<GamePlayer> players = new();
         foreach (var player in (JArray)jsonObject["players"]!)
@@ -23,24 +24,27 @@ internal class GameStateJsonConverter : JsonConverter<GameState>
             players.Add(player.ToObject<GamePlayer>()!);
         }
 
-        var rawMap = (JArray)jsonObject["map"]!["tiles"]!;
-        int rows = rawMap.Count;
-        int cols = rawMap[0].Count();
-        var map = new Tile[rows, cols];
-        for (int i = 0; i < rows; i++)
-        {
-            var rowArray = (JArray)rawMap[i];
-
-            for (int j = 0; j < rowArray.Count; j++)
-            {
-                map[j, i] = rowArray[j].ToObject<Tile>()!;
-            }
-        }
-
         List<Zone> zones = new();
         foreach (var zone in (JArray)jsonObject["map"]!["zones"]!)
         {
             zones.Add(zone.ToObject<Zone>()!);
+        }
+
+        var rawTiles = (JArray)rawMap["tiles"]!;
+        int rows = rawTiles.Count;
+        int cols = rawTiles[0].Count();
+        var map = new Tile[rows, cols];
+        for (int y = 0; y < rows; y++)
+        {
+            var rowArray = (JArray)rawTiles[y];
+
+            for (int x = 0; x < rowArray.Count; x++)
+            {
+                var isVisible = this.IsVisible((JArray)rawMap["visibility"]!, x, y);
+                var zoneIndex = this.ComputeZoneIndex(zones, x, y);
+                var tile = rowArray[x].ToObject<Tile>()!;
+                map[y, x] = new(isVisible, zoneIndex, tile.Entities);
+            }
         }
 
         return new GameState(id, tick, players.ToArray(), map, zones.ToArray());
@@ -50,5 +54,27 @@ internal class GameStateJsonConverter : JsonConverter<GameState>
     public override void WriteJson(JsonWriter writer, GameState? value, JsonSerializer serializer)
     {
         throw new NotSupportedException();
+    }
+
+    private bool IsVisible(JArray visibility, int x, int y)
+    {
+        string row = visibility[y]!.ToObject<string>()!;
+        return row[x] == '1';
+    }
+
+    private int? ComputeZoneIndex(List<Zone> zones, int x, int y)
+    {
+        foreach (var zone in zones)
+        {
+            if ((zone.X <= x) && (x < zone.X + zone.Width))
+            {
+                if ((zone.Y <= y) && (y < zone.Y + zone.Height))
+                {
+                    return zone.Index;
+                }
+            }
+        }
+
+        return null;
     }
 }
