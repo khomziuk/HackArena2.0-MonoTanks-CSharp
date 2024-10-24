@@ -31,18 +31,18 @@ internal class GameStateJsonConverter : JsonConverter<GameState>
         }
 
         var rawTiles = (JArray)rawMap["tiles"]!;
-        int rows = rawTiles.Count;
-        int cols = rawTiles[0].Count();
-        var map = new Tile[rows, cols];
-        for (int y = 0; y < rows; y++)
+        int columns = rawTiles.Count;
+        int rows = rawTiles[0].Count();
+        var map = new Tile[rows, rows];
+        for (int x = 0; x < columns; x++)
         {
-            var rowArray = (JArray)rawTiles[y];
+            var columnArray = (JArray)rawTiles[x];
 
-            for (int x = 0; x < rowArray.Count; x++)
+            for (int y = 0; y < columnArray.Count; y++)
             {
                 var isVisible = this.IsVisible((JArray)rawMap["visibility"]!, x, y);
                 var zoneIndex = this.ComputeZoneIndex(zones, x, y);
-                var tile = rowArray[x].ToObject<Tile>()!;
+                var tile = columnArray[y].ToObject<Tile>()!;
                 map[y, x] = new(isVisible, zoneIndex, tile.Entities);
             }
         }
