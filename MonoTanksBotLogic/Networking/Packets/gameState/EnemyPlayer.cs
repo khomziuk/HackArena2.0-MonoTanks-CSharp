@@ -18,8 +18,8 @@
 public record class EnemyPlayer(
 string Id,
 string Nickname,
-long Color,
-long Ping)
+uint Color,
+int Ping)
 : GamePlayer(
     Id,
     Nickname,

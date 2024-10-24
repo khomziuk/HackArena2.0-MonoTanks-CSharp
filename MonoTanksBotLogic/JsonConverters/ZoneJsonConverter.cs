@@ -15,10 +15,10 @@ public class ZoneJsonConverter : JsonConverter<Zone>
     {
         JObject jsonObject = JObject.Load(reader);
 
-        var x = jsonObject["x"]!.ToObject<long>()!;
-        var y = jsonObject["y"]!.ToObject<long>()!;
-        var width = jsonObject["width"]!.ToObject<long>()!;
-        var height = jsonObject["height"]!.ToObject<long>()!;
+        var x = jsonObject["x"]!.ToObject<int>()!;
+        var y = jsonObject["y"]!.ToObject<int>()!;
+        var width = jsonObject["width"]!.ToObject<int>()!;
+        var height = jsonObject["height"]!.ToObject<int>()!;
         var index = jsonObject["index"]!.ToObject<int>()!;
         var status = jsonObject["status"]!["type"]!.ToObject<string>()!;
         ZoneStatus zoneStatus = status switch

@@ -14,5 +14,5 @@ namespace MonoTanksClientLogic.Models;
 public abstract record class GamePlayer(
     string Id,
     string Nickname,
-    long Color,
-    long Ping);
+    uint Color,
+    int Ping);

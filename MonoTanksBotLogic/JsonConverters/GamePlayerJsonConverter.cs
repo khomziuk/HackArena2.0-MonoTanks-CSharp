@@ -19,10 +19,10 @@ internal class GamePlayerJsonConverter : JsonConverter<GamePlayer>
             return new OwnPlayer(
                 jsonObject["id"]!.ToObject<string>()!,
                 jsonObject["nickname"]!.ToObject<string>()!,
-                jsonObject["color"]!.ToObject<long>()!,
-                jsonObject["ping"]!.ToObject<long>()!,
-                jsonObject["score"]!.ToObject<long>()!,
-                jsonObject["ticksToRegen"]!.ToObject<long?>()!,
+                jsonObject["color"]!.ToObject<uint>()!,
+                jsonObject["ping"]!.ToObject<int>()!,
+                jsonObject["score"]!.ToObject<int>()!,
+                jsonObject["ticksToRegen"]!.ToObject<int?>()!,
                 jsonObject["isUsingRadar"]!.ToObject<bool>()!);
         }
         else
@@ -30,8 +30,8 @@ internal class GamePlayerJsonConverter : JsonConverter<GamePlayer>
             return new EnemyPlayer(
                 jsonObject["id"]!.ToObject<string>()!,
                 jsonObject["nickname"]!.ToObject<string>()!,
-                jsonObject["color"]!.ToObject<long>()!,
-                jsonObject["ping"]!.ToObject<long>()!);
+                jsonObject["color"]!.ToObject<uint>()!,
+                jsonObject["ping"]!.ToObject<int>()!);
         }
     }
 

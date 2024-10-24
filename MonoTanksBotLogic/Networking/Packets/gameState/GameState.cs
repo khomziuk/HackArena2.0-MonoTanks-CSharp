@@ -14,7 +14,7 @@ namespace MonoTanksClientLogic.Models;
 [JsonConverter(typeof(GameStateJsonConverter))]
 public record class GameState(
     string Id,
-    float Tick,
+    int Tick,
     GamePlayer[] Players,
     Tile[,] Map,
     Zone[] Zones);

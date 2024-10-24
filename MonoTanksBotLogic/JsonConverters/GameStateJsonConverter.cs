@@ -15,7 +15,7 @@ internal class GameStateJsonConverter : JsonConverter<GameState>
         var jsonObject = JObject.Load(reader);
 
         var id = jsonObject["id"]!.ToObject<string>()!;
-        var tick = jsonObject["tick"]!.ToObject<float>();
+        var tick = jsonObject["tick"]!.ToObject<int>();
         var rawMap = jsonObject["map"]!;
 
         List<GamePlayer> players = new();

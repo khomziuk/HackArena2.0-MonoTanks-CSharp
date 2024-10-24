@@ -15,7 +15,7 @@ public abstract record class ZoneStatus
     /// </summary>
     /// <param name="RemainingTicks">Represents remaining ticks to capture.</param>
     /// <param name="PlayerId">Represents capturer player id.</param>
-    public record class BeingCaptured(long RemainingTicks, string PlayerId) : ZoneStatus;
+    public record class BeingCaptured(int RemainingTicks, string PlayerId) : ZoneStatus;
 
     /// <summary>
     /// Represents captured zone status.
@@ -35,5 +35,5 @@ public abstract record class ZoneStatus
     /// <param name="RemainingTicks">Represents ticks remaining to retake.</param>
     /// <param name="CapturedById">Represents capturer id.</param>
     /// <param name="RetakenById">Represents retaker id.</param>
-    public record class BeingRetaken(long RemainingTicks, string CapturedById, string RetakenById) : ZoneStatus;
+    public record class BeingRetaken(int RemainingTicks, string CapturedById, string RetakenById) : ZoneStatus;
 }

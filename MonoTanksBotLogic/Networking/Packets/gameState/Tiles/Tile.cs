@@ -41,7 +41,7 @@ public record class Tile(bool IsVisible, int? ZoneIndex, Tile.TileEntity[] Entit
     /// <param name="OwnerId">Represents owner id of player own tank.</param>
     /// <param name="Turret">Represents turret of player own tank.</param>
     /// <param name="SecondaryItem">Represents secondary item of player own tank.</param>
-    public record class OwnTank(Direction Direction, long Health, string OwnerId, OwnTurret Turret, SecondaryItemType? SecondaryItem) : TileEntity;
+    public record class OwnTank(Direction Direction, int Health, string OwnerId, OwnTurret Turret, SecondaryItemType? SecondaryItem) : TileEntity;
 
     /// <summary>
     /// Represents bullet tile entitiy.
@@ -50,7 +50,7 @@ public record class Tile(bool IsVisible, int? ZoneIndex, Tile.TileEntity[] Entit
     /// <param name="Id">Represents bullet id.</param>
     /// <param name="Speed">Represents bullet speed.</param>
     /// <param name="Type">Represents bullet type.</param>
-    public record class Bullet(Direction Direction, long Id, double Speed, BulletType Type) : TileEntity;
+    public record class Bullet(Direction Direction, int Id, double Speed, BulletType Type) : TileEntity;
 
     /// <summary>
     /// Represents item tile entitiy.
@@ -63,7 +63,7 @@ public record class Tile(bool IsVisible, int? ZoneIndex, Tile.TileEntity[] Entit
     /// </summary>
     /// <param name="Id">Represents laser id.</param>
     /// <param name="Orientation">Represents laser orientation.</param>
-    public record class Laser(long Id, LaserDirection Orientation) : TileEntity;
+    public record class Laser(int Id, LaserDirection Orientation) : TileEntity;
 
     /// <summary>
     /// Represents mine tile entitiy.
@@ -76,5 +76,5 @@ public record class Tile(bool IsVisible, int? ZoneIndex, Tile.TileEntity[] Entit
     /// if the mine hasn't exploded yet.
     /// </para>
     /// </remarks>
-    public record class Mine(long Id, int? ExplosionRemainingTicks) : TileEntity;
+    public record class Mine(int Id, int? ExplosionRemainingTicks) : TileEntity;
 }

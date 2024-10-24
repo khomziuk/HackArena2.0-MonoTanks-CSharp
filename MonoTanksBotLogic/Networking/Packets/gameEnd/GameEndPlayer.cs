@@ -18,4 +18,4 @@
 /// <param name="Kills">
 /// Represents kills of a player.
 /// </param>
-public record class GameEndPlayer(string Id, string Nickname, long Color, long Score, long Kills);
+public record class GameEndPlayer(string Id, string Nickname, uint Color, int Score, int Kills);

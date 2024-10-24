@@ -13,10 +13,10 @@
 public record class OwnPlayer(
     string Id,
     string Nickname,
-    long Color,
-    long Ping,
-    long Score,
-    long? TicksToRegen,
+    uint Color,
+    int Ping,
+    int Score,
+    int? TicksToRegen,
     bool IsUsingRadar)
     : GamePlayer(
         Id,
