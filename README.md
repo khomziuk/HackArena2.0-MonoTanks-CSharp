@@ -1,7 +1,7 @@
 # C# WebSocket Client for Hackathon 2024
 
 This C#-based WebSocket client was developed for the Hackathon 2024, organized
-by WULS-SGGW. It serves as a framework for participants to create AI agents that
+by WULS-SGGW. It serves as a framework for participants to create AI bots that
 can play the game.
 
 To fully test and run the game, you will also need the game server and GUI
@@ -12,21 +12,21 @@ more information about the server and GUI client in the following repository:
 
 ## Development
 
-The agent logic you are going to implement is located in
-`Agent/Agent.cs`:
+The bot logic you are going to implement is located in
+`Bot/Bot.cs`:
 
 ```C#
 using MonoTanksClientLogic;
 using MonoTanksClientLogic.Enums;
 using MonoTanksClientLogic.Models;
 
-namespace Agent;
+namespace Bot;
 
-public class Agent : IAgent
+public class Bot : IBot
 {
-    public Agent(LobbyData lobbyData)
+    public Bot(LobbyData lobbyData)
     {
-        // Initialize your agent. 
+        // Initialize your bot. 
     }
 
     public void OnSubsequentLobbyData(LobbyData lobbyData)
@@ -36,13 +36,13 @@ public class Agent : IAgent
         // new LobbyData is sent and this method is run.
     }
 
-    public AgentResponse NextMove(GameState gameState)
+    public BotResponse NextMove(GameState gameState)
     {
         // Define behaviour of your bot in this method. 
         // This method will be called every game tick with most recent game state.
-        // Use AgentResponse to return your action for each game tick.
+        // Use BotResponse to return your action for each game tick.
 
-        return AgentResponse.Pass();
+        return BotResponse.Pass();
     }
 
     public void OnGameEnd(GameEnd gameEnd)
@@ -63,38 +63,38 @@ public class Agent : IAgent
 ```
 
 
-The `Agent` class implements the `IAgent` interface and defines the behavior of the agent.
- - The constructor `Agent(LobbyData lobbyData)` is called when the agent is created to initialize its state based on the initial lobby data.
+The `Bot` class implements the `IBot` interface and defines the behavior of the bot.
+ - The constructor `Bot(LobbyData lobbyData)` is called when the bot is created to initialize its state based on the initial lobby data.
  - The `OnSubsequentLobbyData(LobbyData lobbyData)` method is triggered whenever there is an update to the lobby data, such as when players join or leave the game.
- - The `NextMove(GameState gameState)` method is called every game tick to determine the agent's next action. This is where the agent’s behavior logic is implemented. It returns an AgentResponse that defines what action the agent will take during the game tick.
- - The `OnGameEnd(GameEnd gameEnd)` method is called when the game finishes, allowing the agent to handle any final actions or cleanup.
- - The `OnGameStarting()` method is called when the game is about to start, letting the agent perform any preparations.
- - The `OnWarningReceived(Warning warning, string? message)` method is invoked when the game issues a warning, allowing the agent to handle warnings appropriately.
+ - The `NextMove(GameState gameState)` method is called every game tick to determine the bot's next action. This is where the bot’s behavior logic is implemented. It returns an BotResponse that defines what action the bot will take during the game tick.
+ - The `OnGameEnd(GameEnd gameEnd)` method is called when the game finishes, allowing the bot to handle any final actions or cleanup.
+ - The `OnGameStarting()` method is called when the game is about to start, letting the bot perform any preparations.
+ - The `OnWarningReceived(Warning warning, string? message)` method is invoked when the game issues a warning, allowing the bot to handle warnings appropriately.
 
-The `NextMove` method returns an `AgentResponse` object, which can be one of the following:
+The `NextMove` method returns an `BotResponse` object, which can be one of the following:
  - `MoveResponse`: Move the tank forward or backward. The `MoveDirection` enum defines the options: `FORWARD` or `BACKWARD`.
  - `RotationResponse`: Rotate the tank or turret. The `RotationDirection` enum specifies the direction: `LEFT` or `RIGHT`.
  - `AbilityUseResponse`: Use an ability such as firing a bullet or using a radar. The `AbilityType` enum includes various options, such as `FIRE_BULLET`, `FIRE_DOUBLE_BULLET`, `USE_LASER`, `USE_RADAR`, and `DROP_MINE`.
  - `PassResponse`: Do nothing for the current game tick.
 
-You can create these responses using static factory methods in the `AgentResponse` class:
- - `AgentResponse.Move()`
- - `AgentResponse.Rotate()`
- - `AgentResponse.UseAbility()`
- - `AgentResponse.Pass()`
+You can create these responses using static factory methods in the `BotResponse` class:
+ - `BotResponse.Move()`
+ - `BotResponse.Rotate()`
+ - `BotResponse.UseAbility()`
+ - `BotResponse.Pass()`
 
 You can modify the mentioned file and create more files in the
-`Agent` directory. Do not
-modify any other files, as this may prevent us from running your agent during
+`Bot` directory. Do not
+modify any other files, as this may prevent us from running your bot during
 the competition.<br><br>
-**Agent example** is available in `Agent/Agent.cs` file.
+**Bot example** can be found in `Bot/Bot.cs` file.
 ### Including Static Files
 
 If you need to include static files that your program should access during
 testing or execution, place them in the `data` folder. This folder is copied
 into the Docker image and will be accessible to your application at runtime.
 For example, you could include configuration files, pre-trained models, or any
-other data your agent might need.
+other data your bot might need.
 
 ## Running the Client
 
@@ -102,7 +102,7 @@ You can run this client in three different ways: locally, within a VS Code
 development container, or manually using Docker.
 
 ### 1. Running locally (on Windows using Visual Studio).
-Simply open project in Visual Studio and use IDE interface to run and debug your agent!
+Simply open project in Visual Studio and use IDE interface to run and debug your bot!
 
 ### 2. Running locally (on Linux or in other IDEs)
 
@@ -120,7 +120,7 @@ To build your solution use in `Debug` configuration use:
 ```sh
 dotnet build HackArena2024H2-CSharp.sln
 ```
-**Remember** we will test your agent in optimized `Release` configuration so make sure everything is correct. You can build `Release` version using command below:
+**Remember** we will test your bot in optimized `Release` configuration so make sure everything is correct. You can build `Release` version using command below:
 ```sh
 dotnet build HackArena2024H2-CSharp.sln -c Release
 ```
