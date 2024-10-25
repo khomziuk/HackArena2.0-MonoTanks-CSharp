@@ -69,7 +69,7 @@ public class Bot : IBot
                     }
                     else if (entity is Tile.EnemyTank)
                     {
-                        symbol = '#';
+                        symbol = '@';
                     }
                     else if (entity is Tile.Bullet bullet)
                     {
