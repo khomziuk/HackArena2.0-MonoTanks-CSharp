@@ -24,6 +24,11 @@ internal class BotWebSocketClient : IDisposable
     private IBot? bot;
 
     /// <summary>
+    /// Gets a value indicating whether connection is open or not.
+    /// </summary>
+    public bool IsConnected { get => this.clientWebSocket.State == WebSocketState.Open; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="BotWebSocketClient"/> class.
     /// </summary>
     /// <param name="host">Represents host of a WebSocket server.</param>

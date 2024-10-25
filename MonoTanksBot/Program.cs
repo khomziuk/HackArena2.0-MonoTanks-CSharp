@@ -58,4 +58,13 @@ _ = parserResult.WithNotParsed<CommandLineOptions>((err) =>
 
 BotWebSocketClient client = new(host, port, nickname, code);
 
+var currentDomain = System.AppDomain.CurrentDomain;
+currentDomain.ProcessExit += async (s, e) =>
+{
+    if (client.IsConnected)
+    {
+        await client.CloseAsync();
+    }
+};
+
 await client.ConnectAsync();

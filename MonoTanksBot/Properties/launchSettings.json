@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MonoTanksBot": {
+      "commandName": "Project",
+      "commandLineArgs": "-n Lokinado"
+    }
+  }
+}
