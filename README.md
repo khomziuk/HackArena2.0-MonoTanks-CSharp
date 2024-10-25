@@ -10,6 +10,9 @@ more information about the server and GUI client in the following repository:
 
 - [Server and GUI Client Repository](https://github.com/INIT-SGGW/HackArena2.0-MonoTanks)
 
+The guide to the game mechanics and tournament rules can be found on the:
+- [instruction page](https://hackarena.pl/Assets/Game/HackArena%202.0%20-%20instrukcja.pdf).
+
 ## Development
 
 The bot logic you are going to implement is located in
