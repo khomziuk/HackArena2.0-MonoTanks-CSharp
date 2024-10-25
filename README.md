@@ -1,4 +1,4 @@
-# C# WebSocket Client for HackArena 2.0
+# C# WebSocket API wrapper for HackArena 2.0
 
 This C#-based WebSocket client was developed for the HackArena 2.0, organized
 by kn init. It serves as a api wrapper for participants to create AI bots that
@@ -16,8 +16,8 @@ The guide to the game mechanics and tournament rules can be found on the:
 ## Development
 
 The bot logic you are going to implement is located in
-`Bot/Bot.cs`:
-
+`Bot/Bot.cs`: <br>
+**Bot example** can be found in `Bot/Bot.cs` file.
 ```C#
 using MonoTanksBotLogic;
 using MonoTanksBotLogic.Enums;
@@ -89,8 +89,7 @@ You can create these responses using static factory methods in the `BotResponse`
 You can modify the mentioned file and create more files in the
 `Bot` directory. Do not
 modify any other files, as this may prevent us from running your bot during
-the competition.<br><br>
-**Bot example** can be found in `Bot/Bot.cs` file.
+the competition.
 ### Including Static Files
 
 If you need to include static files that your program should access during
@@ -121,11 +120,11 @@ dotnet --list-runtimes
 
 To build your solution use in `Debug` configuration use:
 ```sh
-dotnet build HackArena2024H2-CSharp.sln
+dotnet build HackArena2.0-MonoTanks-CSharp.sln
 ```
 **Remember** we will test your bot in optimized `Release` configuration so make sure everything is correct. You can build `Release` version using command below:
 ```sh
-dotnet build HackArena2024H2-CSharp.sln -c Release
+dotnet build HackArena2.0-MonoTanks-CSharp.sln -c Release
 ```
 
 Assuming the game server is running on `localhost:5000` (refer to the server
@@ -155,7 +154,7 @@ Steps:
    ```
 2. Run the Docker container:
    ```sh
-   docker run --rm bot --host host.docker.internal --nickname TEAM_NAME
+   docker run --rm bot --host host.docker.internal -n TEAM_NAME
    ```
 
 If the server is running on your local machine, use the
